@@ -58,7 +58,19 @@ def CodeHTML(textBlack, veganGreen):
                            'padding':'1.5%'},
                 ),
             ], className='header', style={'background': 'white'}
-            )            
+            ),
+        html.H1(
+            children= 'Vælg en storkreds',
+            className="header-description",
+            style={"fontSize": "18px", 
+                   "color": textBlack,
+                   "text-align": "center",
+                   'background': 'white',
+                   'font': 'Roboto',
+                   "margin-top": "20px", 
+                   "margin-bottom":'10px',
+                   "padding":"1.5%"},
+            ),            
     ],style={'background-color':'white','margin':'2%','display':'inline-block'})
     return component
 
