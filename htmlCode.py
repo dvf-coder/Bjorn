@@ -10,6 +10,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 #%% Definitions from the main-file
+
 # This codeblock contains the variables for the dash-board
 #Style
 textBlack = 'rgb(0,0,0)' #Black for text
@@ -17,14 +18,17 @@ veganGreen = 'rgb(15,122,55)' # Light-green for the vegan color option !!! Chang
 veggieGreen = 'rgb(5,122,87)' # Dark-green for the vegetarian color option !!! Change for real color
 
 #Lists
-storkredse = () # !!! change list according to values from survey
+storkredse = ('Storkøbenhavn','Fyn') # !!! change list according to values from survey
 parties = () # !!! Add list according to values from survey
 candidates = () # !!! Add list according to values from survey
 questions = () # !!! Add questions to this list, maybe as dictionary
 
+# Dictonaries used for dropdown menus
+dicStorkredse = [{'label': i, 'value':i} for i in storkredse]
+
 #%% function with html code
 
-def CodeHTML(textBlack, veganGreen):
+def CodeHTML(textBlack, veganGreen, storkredse):
     headline = 'Vegetarisk folketingsvalg 2022'
     subheadline = '''Det grønne valg 2022 er Dansk Vegetarisk Forenings 
     valgundersøgelse forud for folketingsvalget. 
@@ -70,12 +74,20 @@ def CodeHTML(textBlack, veganGreen):
                    "margin-top": "20px", 
                    "margin-bottom":'10px',
                    "padding":"1.5%"},
-            ),            
+            ),
+        html.Div(
+            children= [
+                dcc.Dropdown(id='storkreds',
+                             options = (storkredse),
+                             value = (storkredse[1]),
+                             style = {"margin-bottom":'50px'}
+                             )
+                ])            
     ],style={'background-color':'white','margin':'2%','display':'inline-block'})
     return component
-
+# ,options=[{'label':i,'value':i} for i in features], value=question_default)], style={"margin-bottom":'50px'}),
 app = dash.Dash()
-app.layout = CodeHTML(textBlack, veganGreen)
+app.layout = CodeHTML(textBlack, veganGreen, storkredse)
 
 # dash code
 import dashCode # py-file in work-dir
