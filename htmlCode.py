@@ -24,7 +24,7 @@ questions = () # !!! Add questions to this list, maybe as dictionary
 
 #%% function with html code
 
-def CodeHTML(textBlack):
+def CodeHTML(textBlack, veganGreen):
     headline = 'Vegetarisk folketingsvalg 2022'
     subheadline = '''Det grønne valg 2022 er Dansk Vegetarisk Forenings 
     valgundersøgelse forud for folketingsvalget. 
@@ -63,7 +63,7 @@ def CodeHTML(textBlack):
     return component
 
 app = dash.Dash()
-app.layout = CodeHTML(textBlack)
+app.layout = CodeHTML(textBlack, veganGreen)
 
 # dash code
 import dashCode # py-file in work-dir
