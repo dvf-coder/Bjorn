@@ -11,9 +11,9 @@ from plotly import graph_objects as go
 import pandas as pd
 import dash
 from dash.dependencies import Input, Output
-from dash import Dash, html, dcc # Vi bruger forskellige versioner, hvilket betyder at vi skal importere dash forskelligt :/
-# import dash_core_components as dcc
-# import dash_html_components as html
+#from dash import Dash, html, dcc # Vi bruger forskellige versioner, hvilket betyder at vi skal importere dash forskelligt :/
+import dash_core_components as dcc
+import dash_html_components as html
 
 # Load Veggie Data
 
@@ -32,10 +32,10 @@ veganGreen = 'rgb(15,122,55)' # Light-green for the vegan color option !!! Chang
 veggieGreen = 'rgb(5,122,87)' # Dark-green for the vegetarian color option !!! Change for real color
 
 #Lists
-storkredse = ('Storkøbenhavn','Fyn') # !!! change list according to values from survey
-parties = () # !!! Add list according to values from survey
-candidates = () # !!! Add list according to values from survey
-questions = () # !!! Add questions to this list, maybe as dictionary
+storkredse = ['Storkøbenhavn','Fyn'] # !!! change list according to values from survey
+parties = [] # !!! Add list according to values from survey
+candidates = [] # !!! Add list according to values from survey
+questions = [] # !!! Add questions to this list, maybe as dictionary
 
 # Dictonaries used for dropdown menus
 dicStorkredse = [{'label': i, 'value':i} for i in storkredse]
@@ -112,7 +112,7 @@ app = dash.Dash()
 app.layout = CodeHTML(textBlack, veganGreen, storkredse)
 
 # dash code
-import dashCode # py-file in work-dir
+#import dashCode # py-file in work-dir
 # Start the dash-board
 server = app.server
 
