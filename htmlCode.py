@@ -24,6 +24,7 @@ df_nameIndex = df.set_index("Navn")
 
 
 #%% Definitions from the main-file
+
 # This codeblock contains the variables for the dash-board
 #Style
 textBlack = 'rgb(0,0,0)' #Black for text
@@ -31,14 +32,17 @@ veganGreen = 'rgb(15,122,55)' # Light-green for the vegan color option !!! Chang
 veggieGreen = 'rgb(5,122,87)' # Dark-green for the vegetarian color option !!! Change for real color
 
 #Lists
-storkredse = () # !!! change list according to values from survey
+storkredse = ('Storkøbenhavn','Fyn') # !!! change list according to values from survey
 parties = () # !!! Add list according to values from survey
 candidates = () # !!! Add list according to values from survey
 questions = () # !!! Add questions to this list, maybe as dictionary
 
+# Dictonaries used for dropdown menus
+dicStorkredse = [{'label': i, 'value':i} for i in storkredse]
+
 #%% function with html code
 
-def CodeHTML(textBlack, veganGreen):
+def CodeHTML(textBlack, veganGreen, storkredse):
     headline = 'Vegetarisk folketingsvalg 2022'
     subheadline = '''Det grønne valg 2022 er Dansk Vegetarisk Forenings 
     valgundersøgelse forud for folketingsvalget. 
@@ -73,6 +77,27 @@ def CodeHTML(textBlack, veganGreen):
                 ),
             ], className='header', style={'background': 'white'}
             ),
+        html.H1(
+            children= 'Vælg en storkreds',
+            className="header-description",
+            style={"fontSize": "18px", 
+                   "color": textBlack,
+                   "text-align": "center",
+                   'background': 'white',
+                   'font': 'Roboto',
+                   "margin-top": "20px", 
+                   "margin-bottom":'10px',
+                   "padding":"1.5%"},
+            ),
+        html.Div(
+            children= [
+                dcc.Dropdown(id='storkreds',
+                             options = (storkredse),
+                             value = (storkredse[1]),
+                             style = {"margin-bottom":'50px'}
+                             )
+                ])            
+            ),
         html.Div([
             html.Label("Vælg kandidat"),
             dcc.Dropdown(df_nameIndex.index,
@@ -83,9 +108,9 @@ def CodeHTML(textBlack, veganGreen):
         ])
     ],style={'background-color':'white','margin':'2%','display':'inline-block'})
     return component
-
+# ,options=[{'label':i,'value':i} for i in features], value=question_default)], style={"margin-bottom":'50px'}),
 app = dash.Dash()
-app.layout = CodeHTML(textBlack, veganGreen)
+app.layout = CodeHTML(textBlack, veganGreen, storkredse)
 
 # dash code
 import dashCode # py-file in work-dir
