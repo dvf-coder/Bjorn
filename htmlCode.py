@@ -96,8 +96,7 @@ def CodeHTML(textBlack, veganGreen, storkredse):
                              value = (storkredse[1]),
                              style = {"margin-bottom":'50px'}
                              )
-                ])            
-            ),
+                ]),
         html.Div([
             html.Label("Vælg kandidat"),
             dcc.Dropdown(df_nameIndex.index,
