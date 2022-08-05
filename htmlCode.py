@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 '''
@@ -6,9 +7,22 @@ Created on Thu Aug  4 13:39:17 2022
 @author: bjorn
 '''
 # Libraries
+from plotly import graph_objects as go
+import pandas as pd
 import dash
-import dash_core_components as dcc
-import dash_html_components as html
+from dash.dependencies import Input, Output
+from dash import Dash, html, dcc # Vi bruger forskellige versioner, hvilket betyder at vi skal importere dash forskelligt :/
+# import dash_core_components as dcc
+# import dash_html_components as html
+
+# Load Veggie Data
+
+df = pd.read_csv("kv21_trimmet_98.csv",
+                 dtype={"fips": str})
+df = df.fillna(0) # replace NA values with 0
+df_nameIndex = df.set_index("Navn")
+
+
 #%% Definitions from the main-file
 # This codeblock contains the variables for the dash-board
 #Style
@@ -58,7 +72,15 @@ def CodeHTML(textBlack, veganGreen):
                            'padding':'1.5%'},
                 ),
             ], className='header', style={'background': 'white'}
-            )            
+            ),
+        html.Div([
+            html.Label("Vælg kandidat"),
+            dcc.Dropdown(df_nameIndex.index,
+                         placeholder = "Vælg kandidat fra listen",
+                         multi = True,
+                         id= "Candidate_dropdown"),
+            dcc.Graph(id = "Lollipop_candidates")
+        ])
     ],style={'background-color':'white','margin':'2%','display':'inline-block'})
     return component
 
@@ -69,5 +91,19 @@ app.layout = CodeHTML(textBlack, veganGreen)
 import dashCode # py-file in work-dir
 # Start the dash-board
 server = app.server
+
+@app.callback(
+    Output("Lollipop_candidates", "figure"),
+    Input("Candidate_dropdown", "value")
+    )
+def update_lollipop(value):
+    value_list = list(value)
+    fig = go.Figure()
+    df_temp = df_nameIndex.loc[value_list]
+    for i, mean in enumerate(df_temp["Score"]):
+        fig.add_trace(go.Scatter(x=[i,i],y=[0,mean]))
+    return fig
+
+
 if __name__ == '__main__':
     app.run_server()
