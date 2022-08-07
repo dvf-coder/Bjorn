@@ -103,12 +103,13 @@ def CodeHTML(textBlack, veganGreen, storkredse):
                              options= kommuneList,
                              value=kommuneList[0],
                              style={"margin-bottom": '50px'}
-                             )
+                             ),
+                dcc.Store(id = "kommuneData")
 
                 ]),
         html.Div([
             html.Label("Vælg kandidat"),
-            dcc.Dropdown(df_nameIndex[df_nameIndex["Kommune"]==kommuneValue].index,
+            dcc.Dropdown(df_nameIndex.index,
                          placeholder = "Vælg kandidat fra listen",
                          multi = True,
                          id= "Candidate_dropdown"),
@@ -126,14 +127,10 @@ app.layout = CodeHTML(textBlack, veganGreen, storkredse)
 server = app.server
 
 @app.callback(
-    Output("Candidate_dropdown", "value"),
-    Input("kommune", "value")
-    )
-def update_kommune(value):
-
-    return 
-
-
+    Output('kommuneData', 'data'),
+    Input('kommune', 'value'))
+def save_data(value):
+     return json.dumps(value)
 
 
 @app.callback(
@@ -141,11 +138,12 @@ def update_kommune(value):
     Input("Candidate_dropdown", "value")
     )
 def update_lollipop(value):
-    value_list = list(value)
+    valueList = list(value)
     fig = go.Figure()
-    df_temp = df_temp.loc[value_list]
+    df_temp = df_nameIndex.loc[valueList]
     for i, mean in enumerate(df_temp["Score"]):
         fig.add_trace(go.Scatter(x=[i,i],y=[0,mean]))
+
     return fig
 
 
