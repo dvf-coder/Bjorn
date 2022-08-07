@@ -11,9 +11,9 @@ from plotly import graph_objects as go
 import pandas as pd
 import dash
 from dash.dependencies import Input, Output
-#from dash import Dash, html, dcc # Vi bruger forskellige versioner, hvilket betyder at vi skal importere dash forskelligt :/
-import dash_core_components as dcc
-import dash_html_components as html
+from dash import Dash, html, dcc # Vi bruger forskellige versioner, hvilket betyder at vi skal importere dash forskelligt :/
+#import dash_core_components as dcc
+#import dash_html_components as html
 
 # Load Veggie Data
 
@@ -36,6 +36,7 @@ storkredse = ['Storkøbenhavn','Fyn'] # !!! change list according to values from
 parties = [] # !!! Add list according to values from survey
 candidates = [] # !!! Add list according to values from survey
 questions = [] # !!! Add questions to this list, maybe as dictionary
+kommuneList = df["Kommune"].unique()
 
 # Dictonaries used for dropdown menus
 dicStorkredse = [{'label': i, 'value':i} for i in storkredse]
@@ -95,11 +96,19 @@ def CodeHTML(textBlack, veganGreen, storkredse):
                              options = (storkredse),
                              value = (storkredse[1]),
                              style = {"margin-bottom":'50px'}
+                             ),
+                html.Br(),
+                # kommune dropdown is a placeholder, serving the funcition of 'proof-of-concept' for the function of storkreds
+                dcc.Dropdown(id='kommune',
+                             options= kommuneList,
+                             value=kommuneList[0],
+                             style={"margin-bottom": '50px'}
                              )
+
                 ]),
         html.Div([
             html.Label("Vælg kandidat"),
-            dcc.Dropdown(df_nameIndex.index,
+            dcc.Dropdown(df_nameIndex[df_nameIndex["Kommune"]==kommuneValue].index,
                          placeholder = "Vælg kandidat fra listen",
                          multi = True,
                          id= "Candidate_dropdown"),
@@ -117,13 +126,24 @@ app.layout = CodeHTML(textBlack, veganGreen, storkredse)
 server = app.server
 
 @app.callback(
+    Output("Candidate_dropdown", "value"),
+    Input("kommune", "value")
+    )
+def update_kommune(value):
+
+    return 
+
+
+
+
+@app.callback(
     Output("Lollipop_candidates", "figure"),
     Input("Candidate_dropdown", "value")
     )
 def update_lollipop(value):
     value_list = list(value)
     fig = go.Figure()
-    df_temp = df_nameIndex.loc[value_list]
+    df_temp = df_temp.loc[value_list]
     for i, mean in enumerate(df_temp["Score"]):
         fig.add_trace(go.Scatter(x=[i,i],y=[0,mean]))
     return fig
