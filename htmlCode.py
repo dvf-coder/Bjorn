@@ -39,8 +39,7 @@ questions = [] # !!! Add questions to this list, maybe as dictionary
 kommuneList = df["Kommune"].unique()
 
 # Dictonaries used for dropdown menus
-dicStorkredse = [{'label': i, 'value':i} for i in storkredse]
-
+dicStorkredse = {{'label': i, 'value':i} for i in storkredse}
 #%% function with html code
 
 def CodeHTML(textBlack, veganGreen, storkredse):
@@ -93,14 +92,14 @@ def CodeHTML(textBlack, veganGreen, storkredse):
         html.Div(
             children= [
                 dcc.Dropdown(id='storkreds',
-                             options = (storkredse),
-                             value = (storkredse[1]),
+                             options = [{'label': i, 'value':i} for i in storkredse],
+                             value = 'Fyn',
                              style = {"margin-bottom":'50px'}
                              ),
                 html.Br(),
                 # kommune dropdown is a placeholder, serving the funcition of 'proof-of-concept' for the function of storkreds
                 dcc.Dropdown(id='kommune',
-                             options= kommuneList,
+                             options= [{'label': i, 'value':i} for i in kommuneList],
                              value=kommuneList[0],
                              style={"margin-bottom": '50px'}
                              ),
@@ -109,7 +108,7 @@ def CodeHTML(textBlack, veganGreen, storkredse):
                 ]),
         html.Div([
             html.Label("Vælg kandidat"),
-            dcc.Dropdown(df_nameIndex.index,
+            dcc.Dropdown(options = [{'label': i, 'value':i} for i in df_nameIndex.index],
                          placeholder = "Vælg kandidat fra listen",
                          multi = True,
                          id= "Candidate_dropdown"),
@@ -126,11 +125,11 @@ app.layout = CodeHTML(textBlack, veganGreen, storkredse)
 # Start the dash-board
 server = app.server
 
-@app.callback(
-    Output('kommuneData', 'data'),
-    Input('kommune', 'value'))
-def save_data(value):
-     return json.dumps(value)
+#@app.callback(
+#    Output('kommuneData', 'data'),
+#   Input('kommune', 'value'))
+#def save_data(value):
+#     return json.dumps(value)
 
 
 @app.callback(
