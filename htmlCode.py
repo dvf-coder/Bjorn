@@ -32,17 +32,18 @@ veganGreen = 'rgb(15,122,55)' # Light-green for the vegan color option !!! Chang
 veggieGreen = 'rgb(5,122,87)' # Dark-green for the vegetarian color option !!! Change for real color
 
 #Lists
-storkredse = ['Storkøbenhavn','Fyn'] # !!! change list according to values from survey
 parties = [] # !!! Add list according to values from survey
 candidates = [] # !!! Add list according to values from survey
 questions = [] # !!! Add questions to this list, maybe as dictionary
-kommuneList = df["Kommune"].unique()
+kommuneList = df["Kommune"].unique()  # !!! change list according to values from survey
 
 # Labels and values defined for dropdown menus
 labelsKommuneList = [{'label': i, 'value':i} for i in kommuneList]
+names = [{'label': i, 'value':i} for i in df_nameIndex.index]
+
 #%% function with html code
 
-def CodeHTML(textBlack, veganGreen, storkredse):
+def CodeHTML(textBlack, veganGreen, labelsKommuneList):
     headline = 'Vegetarisk folketingsvalg 2022'
     subheadline = '''Det grønne valg 2022 er Dansk Vegetarisk Forenings 
     valgundersøgelse forud for folketingsvalget. 
@@ -109,20 +110,19 @@ def CodeHTML(textBlack, veganGreen, storkredse):
                 ]),
         html.Div([
             html.Label("Vælg kandidat"),
-            dcc.Dropdown(options = [{'label': i, 'value':i} for i in df_nameIndex.index],
+            dcc.Dropdown(id= "Candidate_dropdown",
+                         options = names,
                          placeholder = "Vælg kandidat fra listen",
-                         multi = True,
-                         id= "Candidate_dropdown"),
+                         multi = True)
+                         ,
             dcc.Graph(id = "Lollipop_candidates")
-        ])
-    ],style={'background-color':'white','margin':'2%','display':'inline-block'})
+        ])],style={'background-color':'white','margin':'2%','display':'inline-block'})
     return component
-# ,options=[{'label':i,'value':i} for i in features], value=question_default)], style={"margin-bottom":'50px'}),
+
 app = dash.Dash()
-app.layout = CodeHTML(textBlack, veganGreen, storkredse)
+app.layout = CodeHTML(textBlack, veganGreen, labelsKommuneList)
 
 # dash code
-#import dashCode # py-file in work-dir
 # Start the dash-board
 server = app.server
 
