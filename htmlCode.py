@@ -38,8 +38,8 @@ candidates = [] # !!! Add list according to values from survey
 questions = [] # !!! Add questions to this list, maybe as dictionary
 kommuneList = df["Kommune"].unique()
 
-# Dictonaries used for dropdown menus
-dicStorkredse = {{'label': i, 'value':i} for i in storkredse}
+# Labels and values defined for dropdown menus
+labelsKommuneList = [{'label': i, 'value':i} for i in kommuneList]
 #%% function with html code
 
 def CodeHTML(textBlack, veganGreen, storkredse):
@@ -91,13 +91,14 @@ def CodeHTML(textBlack, veganGreen, storkredse):
             ),
         html.Div(
             children= [
-                dcc.Dropdown(id='storkreds',
-                             options = [{'label': i, 'value':i} for i in storkredse],
-                             value = 'Fyn',
+                dcc.Dropdown(id='kommuner',
+                             options = labelsKommuneList,
+                             value = 'Odense',
                              style = {"margin-bottom":'50px'}
                              ),
                 html.Br(),
                 # kommune dropdown is a placeholder, serving the funcition of 'proof-of-concept' for the function of storkreds
+                # !!! One of these two dropdown should be deleted
                 dcc.Dropdown(id='kommune',
                              options= [{'label': i, 'value':i} for i in kommuneList],
                              value=kommuneList[0],
