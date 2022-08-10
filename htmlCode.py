@@ -34,7 +34,7 @@ veggieGreen = 'rgb(140,190,84)' # Dark-green for the vegetarian color option !!!
 #Lists
 parties = [] # !!! Add list according to values from survey
 candidates = [] # !!! Add list according to values from survey
-questions = [] # !!! Add questions to this list, maybe as dictionary
+questions = df.columns[5:] # !!! Add questions to this list
 kommuneList = df["Kommune"].unique()  # !!! change list according to values from survey
 
 # Labels and values defined for dropdown menus
