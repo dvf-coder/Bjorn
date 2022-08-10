@@ -116,6 +116,18 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                          multi = True),
             dcc.Graph(id = "Lollipop_candidates")
         ]),
+        html.H1(
+            children= 'Vælg et spørgsmål',
+            className="header-description",
+            style={"fontSize": "18px", 
+                   "color": veganGreen,
+                   "text-align": "center",
+                   'background': 'white',
+                   'font': 'Roboto',
+                   "margin-top": "20px", 
+                   "margin-bottom":'10px',
+                   "padding":"1.5%"},
+            ),
         html.Div([
             dcc.RadioItems(id = 'questions',
                           options = labelsQuestions,
