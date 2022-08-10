@@ -40,6 +40,7 @@ kommuneList = df["Kommune"].unique()  # !!! change list according to values from
 # Labels and values defined for dropdown menus
 labelsKommuneList = [{'label': i, 'value':i} for i in kommuneList]
 names = [{'label': i, 'value':i} for i in df_nameIndex.index]
+labelsQuestions = [{'label': i, 'value':i} for i in questions]
 
 #%% function with html code
 
@@ -114,7 +115,15 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                          placeholder = "Vælg kandidat fra listen",
                          multi = True),
             dcc.Graph(id = "Lollipop_candidates")
-        ])],style={'background-color':'white','margin':'2%','display':'inline-block'})
+        ]),
+        html.Div([
+            dcc.RadioItems(id = 'questions',
+                          options = labelsQuestions,
+                          value = questions[0],
+                          inline = True
+                          )
+            ])
+        ],style={'background-color':'white','margin':'2%','display':'inline-block'})
     return component
 
 app = dash.Dash()
