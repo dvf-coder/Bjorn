@@ -126,7 +126,8 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                    'font': 'Roboto',
                    "margin-top": "20px", 
                    "margin-bottom":'10px',
-                   "padding":"1.5%"},
+                   "padding":"1.5%",
+                   "border":"2px black solid"}
             ),
         html.Div([
             dcc.RadioItems(id = 'questions',
