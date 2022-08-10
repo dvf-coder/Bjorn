@@ -28,8 +28,8 @@ df_nameIndex = df.set_index("Navn")
 # This codeblock contains the variables for the dash-board
 #Style
 textBlack = 'rgb(0,0,0)' #Black for text
-veganGreen = 'rgb(15,122,55)' # Light-green for the vegan color option !!! Change for real color
-veggieGreen = 'rgb(5,122,87)' # Dark-green for the vegetarian color option !!! Change for real color
+veganGreen = 'rgb(16,114,60)' # Light-green for the vegan color option !!! Change for real color
+veggieGreen = 'rgb(140,190,84)' # Dark-green for the vegetarian color option !!! Change for real color
 
 #Lists
 parties = [] # !!! Add list according to values from survey
