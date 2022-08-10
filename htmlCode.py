@@ -120,9 +120,9 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
         ]),
         html.Div([
             dcc.RadioItems(id = 'questions',
-                           inline = True,
                           options = labelsQuestions,
                           value = questions[0],
+                          labelStyle={'display': 'inline-block'}
                           )
             ])
         ],style={'background-color':'white','margin':'2%','display':'inline-block'})
