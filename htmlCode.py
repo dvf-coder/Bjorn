@@ -118,25 +118,33 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                          ,
             dcc.Graph(id = "Lollipop_candidates")
         ]),
-        html.H1(
-            children= 'Vælg et spørgsmål',
-            className="header-description",
-            style={"fontSize": "18px", 
-                   "color": veganGreen,
-                   "text-align": "center",
-                   'background': 'white',
-                   'font': 'Roboto',
-                   "margin-top": "20px", 
-                   "margin-bottom":'10px',
-                   "padding":"1.5%",
-                   "border":"2px black solid"}
-            ),
-        html.Div([
-            dcc.RadioItems(questions,
-                          value = questions[0],
-                          labelStyle={'display': 'inline-block'},
-                          id = 'questions')
-            ])
+        html.Div(
+            children =[
+                html.H1(
+                    children= 'Vælg et spørgsmål',
+                    className="header-description",
+                    style={"fontSize": "18px", 
+                           "color": veganGreen,
+                           "text-align": "center",
+                           'background': 'white',
+                           'font': 'Roboto',
+                           "margin-top": "20px", 
+                           "margin-bottom":'10px',
+                           "padding":"1.5%",
+                           "border":"2px black solid"}
+                    ),
+                html.Div([
+                    dcc.RadioItems(questions,
+                                  value = questions[0],
+                                  labelStyle={'display': 'inline-block'},
+                                  id = 'questions')
+                    ]),
+                html.Div([
+                    dcc.Graph(id = 'roseChart')],
+                    style={'width':'70px', 'margin':'70px'})
+                ])
+        ,
+        
         ],style={'background-color':'white','margin':'2%','display':'inline-block'})
     return component
 
