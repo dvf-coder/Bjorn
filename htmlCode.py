@@ -34,12 +34,13 @@ veggieGreen = 'rgb(140,190,84)' # Dark-green for the vegetarian color option !!!
 #Lists
 parties = [] # !!! Add list according to values from survey
 candidates = [] # !!! Add list according to values from survey
-questions = [] # !!! Add questions to this list, maybe as dictionary
+questions = df.columns[5:] # !!! Add questions to this list
 kommuneList = df["Kommune"].unique()  # !!! change list according to values from survey
 
 # Labels and values defined for dropdown menus
-labelsKommuneList = [{'label': i, 'value':i} for i in kommuneList]
-names = [{'label': i, 'value':i} for i in df_nameIndex.index]
+#labelsKommuneList = [{'label': i, 'value':i} for i in kommuneList]
+#names = [{'label': i, 'value':i} for i in df_nameIndex.index]
+#labelsQuestions = [{'label': i, 'value':i} for i in questions]
 
 #%% function with html code
 
@@ -92,35 +93,55 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
             ),
         html.Div(
             children= [
-                dcc.Dropdown(id='kommuner',
-                             options = labelsKommuneList,
+                dcc.Dropdown(kommuneList,
+                             id='kommuner',
                              value = 'Odense',
                              style = {"margin-bottom":'50px'}
                              ),
                 html.Br(),
                 # kommune dropdown is a placeholder, serving the funcition of 'proof-of-concept' for the function of storkreds
                 # !!! One of these two dropdown should be deleted
-                dcc.Dropdown(id='kommune',
-                             options= [{'label': i, 'value':i} for i in kommuneList],
+                dcc.Dropdown(kommuneList,
                              value=kommuneList[0],
-                             style={"margin-bottom": '50px'}
+                             style={"margin-bottom": '50px'},
+                             id='kommune'
                              ),
                 dcc.Store(id = "kommuneData")
 
                 ]),
         html.Div([
             html.Label("Vælg kandidat"),
-            dcc.Dropdown(id= "Candidate_dropdown",
-                         options = names,
+            dcc.Dropdown(df_nameIndex.index,
                          placeholder = "Vælg kandidat fra listen",
-                         multi = True)
+                         multi = True,
+                         id= "Candidate_dropdown",)
                          ,
             dcc.Graph(id = "Lollipop_candidates")
-        ])],style={'background-color':'white','margin':'2%','display':'inline-block'})
+        ]),
+        html.H1(
+            children= 'Vælg et spørgsmål',
+            className="header-description",
+            style={"fontSize": "18px", 
+                   "color": veganGreen,
+                   "text-align": "center",
+                   'background': 'white',
+                   'font': 'Roboto',
+                   "margin-top": "20px", 
+                   "margin-bottom":'10px',
+                   "padding":"1.5%",
+                   "border":"2px black solid"}
+            ),
+        html.Div([
+            dcc.RadioItems(questions,
+                          value = questions[0],
+                          labelStyle={'display': 'inline-block'},
+                          id = 'questions')
+            ])
+        ],style={'background-color':'white','margin':'2%','display':'inline-block'})
     return component
 
 app = dash.Dash()
-app.layout = CodeHTML(textBlack, veganGreen, labelsKommuneList)
+app.layout = CodeHTML(textBlack, veganGreen, kommuneList)
 
 # dash code
 # Start the dash-board
