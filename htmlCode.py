@@ -175,6 +175,13 @@ def update_lollipop(value):
 
     return fig
 
+@app.callback(
+    Output('roseChart', 'figure'),
+    Input('questions', 'value'),
+    )
+def updateRoseChart():
+    
+    return fig
 
 if __name__ == '__main__':
     app.run_server()
