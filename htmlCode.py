@@ -177,10 +177,16 @@ def update_lollipop(value):
 
 @app.callback(
     Output('roseChart', 'figure'),
-    Input('questions', 'value'),
+    [Input('questions', 'value'), Input('kommune', 'value')]
     )
-def updateRoseChart():
-    
+def updateRoseChart(value):
+    if value != questions[0]:
+        storkreds = 
+        fig = px.bar_polar(
+            data_frame =,
+            r = value,
+            theta = 'Navn',
+            color = value)
     return fig
 
 if __name__ == '__main__':
