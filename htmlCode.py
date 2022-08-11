@@ -198,10 +198,13 @@ def updateRoseChart(question, kommune):
             font=dict(family="Roboto",size=9,color="black"),
             # Changes the colorbar
             coloraxis_colorbar=dict(title="<b>Svarmulighed</b>",
-                                    #tickvals=[0,1,2],
+                                    tickvals=[0,1,2],
                                     ticktext=["Uenig","Delvis enig","Enig"],
                                     lenmode="pixels", len=420)
             )
+        fig.update_coloraxes(colorbar_thickness=16, colorbar_xpad=50)
+        # Changing color of text inside polar
+        fig.update_polars(radialaxis_tickfont_color = 'salmon', angularaxis_gridcolor = 'seagreen')
     return fig
 
 if __name__ == '__main__':
