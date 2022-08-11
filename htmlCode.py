@@ -8,12 +8,12 @@ Created on Thu Aug  4 13:39:17 2022
 '''
 # Libraries
 from plotly import graph_objects as go
+import plotly.express as px
 import pandas as pd
 import dash
 from dash.dependencies import Input, Output
-from dash import Dash, html, dcc # Vi bruger forskellige versioner, hvilket betyder at vi skal importere dash forskelligt :/
-#import dash_core_components as dcc
-#import dash_html_components as html
+from dash import Dash, html, dcc 
+
 
 # Load Veggie Data
 
@@ -179,14 +179,18 @@ def update_lollipop(value):
     Output('roseChart', 'figure'),
     [Input('questions', 'value'), Input('kommune', 'value')]
     )
-def updateRoseChart(value):
-    if value != questions[0]:
-        storkreds = 
+def updateRoseChart(question, kommune):
+    if question != questions[0]:
+        dfStorkreds = df[df['Kommune']== kommune]
         fig = px.bar_polar(
-            data_frame =,
-            r = value,
+            data_frame = dfStorkreds,
+            r = question,
             theta = 'Navn',
-            color = value)
+            #color = question,
+            template="plotly_white",
+            color_continuous_scale= px.colors.sequential.Greens,
+            width=1200,
+            height=720)
     return fig
 
 if __name__ == '__main__':
