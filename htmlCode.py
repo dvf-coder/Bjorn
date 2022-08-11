@@ -38,9 +38,9 @@ questions = df.columns[5:] # !!! Add questions to this list
 kommuneList = df["Kommune"].unique()  # !!! change list according to values from survey
 
 # Labels and values defined for dropdown menus
-labelsKommuneList = [{'label': i, 'value':i} for i in kommuneList]
-names = [{'label': i, 'value':i} for i in df_nameIndex.index]
-labelsQuestions = [{'label': i, 'value':i} for i in questions]
+#labelsKommuneList = [{'label': i, 'value':i} for i in kommuneList]
+#names = [{'label': i, 'value':i} for i in df_nameIndex.index]
+#labelsQuestions = [{'label': i, 'value':i} for i in questions]
 
 #%% function with html code
 
@@ -105,7 +105,8 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                 dcc.Dropdown(id='kommuneValg',
                              options= labelsKommuneList,
                              value=kommuneList[0],
-                             style={"margin-bottom": '50px'}
+                             style={"margin-bottom": '50px'},
+                             id='kommune'
                              ),
 
                 ]),
@@ -130,17 +131,16 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                    "border":"2px black solid"}
             ),
         html.Div([
-            dcc.RadioItems(id = 'questions',
-                          options = labelsQuestions,
+            dcc.RadioItems(questions,
                           value = questions[0],
-                          labelStyle={'display': 'inline-block'}
-                          )
+                          labelStyle={'display': 'inline-block'},
+                          id = 'questions')
             ])
         ],style={'background-color':'white','margin':'2%','display':'inline-block'})
     return component
 
 app = dash.Dash()
-app.layout = CodeHTML(textBlack, veganGreen, labelsKommuneList)
+app.layout = CodeHTML(textBlack, veganGreen, kommuneList)
 
 # dash code
 # Start the dash-board
