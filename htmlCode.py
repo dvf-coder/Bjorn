@@ -92,20 +92,20 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
             ),
         html.Div(
             children= [
-                dcc.Dropdown(id='kommuner',
-                             options = labelsKommuneList,
-                             value = 'Odense',
-                             style = {"margin-bottom":'50px'}
-                             ),
-                html.Br(),
+                # Denne burde være overflødig nu, for jeg har ændret options-valget på den tidligere
+                # dcc.Dropdown(id='kommuner',
+                #              options = labelsKommuneList,
+                #              value = 'Odense',
+                #              style = {"margin-bottom":'50px'}
+                #              ),
+                # html.Br(),
                 # kommune dropdown is a placeholder, serving the funcition of 'proof-of-concept' for the function of storkreds
                 # !!! One of these two dropdown should be deleted
-                dcc.Dropdown(id='kommune',
-                             options= [{'label': i, 'value':i} for i in kommuneList],
+                dcc.Dropdown(id='kommuneValg',
+                             options= labelsKommuneList,
                              value=kommuneList[0],
                              style={"margin-bottom": '50px'}
                              ),
-                dcc.Store(id = "kommuneData")
 
                 ]),
         html.Div([
@@ -126,11 +126,11 @@ app.layout = CodeHTML(textBlack, veganGreen, labelsKommuneList)
 # Start the dash-board
 server = app.server
 
-#@app.callback(
-#    Output('kommuneData', 'data'),
-#   Input('kommune', 'value'))
-#def save_data(value):
-#     return json.dumps(value)
+# @app.callback(
+#     Output('kommuneData', 'value'),
+#     Input('kommune', 'value'))
+# def save_data(value):
+#     return value
 
 
 @app.callback(
