@@ -111,10 +111,8 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
         html.Div([
             html.Label("Vælg kandidat"),
             dcc.Dropdown(id= "Candidate_dropdown",
-                         options = names,
                          placeholder = "Vælg kandidat fra listen",
-                         multi = True)
-                         ,
+                         multi = True),
             dcc.Graph(id = "Lollipop_candidates")
         ])],style={'background-color':'white','margin':'2%','display':'inline-block'})
     return component
@@ -126,13 +124,25 @@ app.layout = CodeHTML(textBlack, veganGreen, labelsKommuneList)
 # Start the dash-board
 server = app.server
 
-# @app.callback(
-#     Output('kommuneData', 'value'),
-#     Input('kommune', 'value'))
-# def save_data(value):
-#     return value
+"""
+Candidates from the kommune/storkreds
+The following callback takes a municipality as input from a dropdown, and from this it creates an output of the 
+candidates for that municipality.
+This output is sent as options for the Dropdown menu below(in the html code), where candidates for the lollipop-graph
+are chosen.
+"""
+@app.callback(
+    Output("Candidate_dropdown", 'options'),
+    Input('kommuneValg', 'value'))
+def save_data(value):
+    return [{"label":x,"value":x} for x in df_nameIndex[df_nameIndex["Kommune"]==value].index]
 
 
+"""
+Lollipop-graph
+The following callback takes multiple dropdown inputs, where the user picks one or several candidates, that are then 
+visualized in a lollipop-graph, that is created in the callback and sent back as output. 
+"""
 @app.callback(
     Output("Lollipop_candidates", "figure"),
     Input("Candidate_dropdown", "value")
