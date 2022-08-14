@@ -149,10 +149,21 @@ def lollipop_all(value):
     
     
     for i, mean in enumerate(df_temp["Score"]):
+        candidate = df_temp.index[i]
         fig.add_trace(go.Scatter(x=[i,i],y=[0,mean], 
                                  marker={"color":veggieGreen,"size":markerSize},
                                 line=go.scatter.Line(color=veggieGreen),
+                                hovertext=[df_temp.loc[candidate]["Parti"],df_temp.loc[candidate]["Parti"]],
                                 showlegend=False))
+    
+    fig.add_hline(y=df_temp["Score"].mean(), 
+            line_width=0.5, 
+            line_dash="dash", 
+            line_color=veggieGreen,
+            annotation_text="Kommune gennemsnit", 
+            annotation_position="bottom right")
+    
+    
     
     tickvals_ = list(range(len(df_temp)))
     ticktext_ = list(df_temp.index)
@@ -160,7 +171,8 @@ def lollipop_all(value):
         xaxis = dict(
             tickmode = "array",
             tickvals = tickvals_,
-            ticktext = ticktext_)
+            ticktext = ticktext_),
+        title = {"text":f"Kandidater for {value}"}
         )
     return fig 
 
