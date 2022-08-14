@@ -207,8 +207,8 @@ def update_lollipop(value):
         xaxis = dict(
             tickmode = "array",
             tickvals = tickvals_,
-            ticktext = ticktext_)
-        )
+            ticktext = ticktext_),
+        xaxis_range=[-1,len(df_temp)])
     return fig
 
 
