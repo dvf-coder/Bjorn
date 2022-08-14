@@ -92,15 +92,6 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
             ),
         html.Div(
             children= [
-                # Denne burde være overflødig nu, for jeg har ændret options-valget på den tidligere
-                # dcc.Dropdown(id='kommuner',
-                #              options = labelsKommuneList,
-                #              value = 'Odense',
-                #              style = {"margin-bottom":'50px'}
-                #              ),
-                # html.Br(),
-                # kommune dropdown is a placeholder, serving the funcition of 'proof-of-concept' for the function of storkreds
-                # !!! One of these two dropdown should be deleted
                 dcc.Dropdown(id='kommuneValg',
                              options= labelsKommuneList,
                              value=kommuneList[0],
@@ -109,6 +100,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
 
                 ]),
         html.Div([
+            dcc.Graph(id="candidate_all"),
             html.Label("Vælg kandidat"),
             dcc.Dropdown(id= "Candidate_dropdown",
                          placeholder = "Vælg kandidat fra listen",
@@ -123,6 +115,21 @@ app.layout = CodeHTML(textBlack, veganGreen, labelsKommuneList)
 # dash code
 # Start the dash-board
 server = app.server
+
+
+@app.callback(
+    Output("candidate_all", "figure"),
+    Input("kommuneValg","value"))
+def lollipop_all(value):
+    fig = go.Figure()
+    df_temp = df_nameIndex[df_nameIndex["Kommune"]==value]
+    for i, mean in enumerate(df_temp["Score"]):
+        fig.add_trace(go.Scatter(x=[i,i],y=[0,mean]))
+
+    return fig 
+
+
+
 
 """
 Candidates from the kommune/storkreds
