@@ -31,6 +31,15 @@ textBlack = 'rgb(0,0,0)' #Black for text
 veganGreen = 'rgb(16,114,60)' # Light-green for the vegan color option !!! Change for real color
 veggieGreen = 'rgb(140,190,84)' # Dark-green for the vegetarian color option !!! Change for real color
 
+H2Style = {"fontSize": "18px", 
+            "color": textBlack,
+            "text-align": "center",
+            'background': 'white',
+            'font': 'Roboto',
+            "margin-top": "20px", 
+            "margin-bottom":'10px',
+            "padding":"1.5%"}
+
 #Lists
 parties = [] # !!! Add list according to values from survey
 candidates = [] # !!! Add list according to values from survey
@@ -88,17 +97,10 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                 ),
             ], className='header', style={'background': 'white'}
             ),
-        html.H1(
+        html.H2(
             children= 'Vælg en storkreds',
             className="header-description",
-            style={"fontSize": "18px", 
-                   "color": textBlack,
-                   "text-align": "center",
-                   'background': 'white',
-                   'font': 'Roboto',
-                   "margin-top": "20px", 
-                   "margin-bottom":'10px',
-                   "padding":"1.5%"},
+            style=H2Style,
             ),
         html.Div(
             children= [
@@ -107,11 +109,14 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                              value=kommuneList[0],
                              style={"margin-bottom": '50px'}
                              ),
-
+                dcc.Graph(id="candidate_all"),
                 ]),
+        html.H2(
+            children= 'Sammenlign kandidatter fra den valgte kommune',
+            className="header-description",
+            style=H2Style,
+            ),
         html.Div([
-            dcc.Graph(id="candidate_all"),
-            html.Label("Vælg kandidat"),
             dcc.Dropdown(id= "Candidate_dropdown",
                          placeholder = "Vælg kandidat fra listen",
                          multi = True),
@@ -127,7 +132,7 @@ app.layout = CodeHTML(textBlack, veganGreen, labelsKommuneList)
 server = app.server
 
 """
-All candidates lollipop-graph
+lollipop-graph municipality
 The following callback takes the choice of municipality as input an creates a subsection of 
 the dataframe, this is then used to make a lollipop graph for the scores of the candidates
 in that municipality
@@ -159,9 +164,6 @@ def lollipop_all(value):
         )
     return fig 
 
-
-
-
 """
 Candidates from the kommune/storkreds
 The following callback takes a municipality as input from a dropdown, and from this it creates an output of the 
@@ -177,7 +179,7 @@ def save_data(value):
 
 
 """
-Lollipop-graph
+Lollipop-graph candidates
 The following callback takes multiple dropdown inputs, where the user picks one or several candidates, that are then 
 visualized in a lollipop-graph, that is created in the callback and sent back as output. 
 """
@@ -189,12 +191,9 @@ def update_lollipop(value):
     valueList = list(value)
     fig = go.Figure()
     df_temp = df_nameIndex.loc[valueList]
-#    for i, mean in enumerate(df_temp["Score"]):
-#        fig.add_trace(go.Scatter(x=[i,i],y=[0,mean]))
-    
+
     df_temp = df_temp.sort_values("Score", ascending = False)
     markerSize = Marker_size(len(df_temp))
-    
     
     for i, mean in enumerate(df_temp["Score"]):
         fig.add_trace(go.Scatter(x=[i,i],y=[0,mean], 
