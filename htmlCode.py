@@ -116,7 +116,12 @@ app.layout = CodeHTML(textBlack, veganGreen, labelsKommuneList)
 # Start the dash-board
 server = app.server
 
-
+"""
+All candidates lollipop-graph
+The following callback takes the choice of municipality as input an creates a subsection of 
+the dataframe, this is then used to make a lollipop graph for the scores of the candidates
+in that municipality
+"""
 @app.callback(
     Output("candidate_all", "figure"),
     Input("kommuneValg","value"))
