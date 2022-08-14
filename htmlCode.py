@@ -139,8 +139,6 @@ def lollipop_all(value):
     fig = go.Figure()
     df_temp = df_nameIndex[df_nameIndex["Kommune"]==value]
     df_temp = df_temp.sort_values("Score", ascending = False)
-#    for i, mean in enumerate(df_temp["Score"]):
-#        fig.add_trace(go.Scatter(x=[i,i],y=[0,mean]))
 
     markerSize = Marker_size(len(df_temp))
     
@@ -159,13 +157,6 @@ def lollipop_all(value):
             tickvals = tickvals_,
             ticktext = ticktext_)
         )
-
-
-
-
-
-
-
     return fig 
 
 
@@ -198,9 +189,27 @@ def update_lollipop(value):
     valueList = list(value)
     fig = go.Figure()
     df_temp = df_nameIndex.loc[valueList]
+#    for i, mean in enumerate(df_temp["Score"]):
+#        fig.add_trace(go.Scatter(x=[i,i],y=[0,mean]))
+    
+    df_temp = df_temp.sort_values("Score", ascending = False)
+    markerSize = Marker_size(len(df_temp))
+    
+    
     for i, mean in enumerate(df_temp["Score"]):
-        fig.add_trace(go.Scatter(x=[i,i],y=[0,mean]))
-
+        fig.add_trace(go.Scatter(x=[i,i],y=[0,mean], 
+                                 marker={"color":veggieGreen,"size":markerSize},
+                                line=go.scatter.Line(color=veggieGreen),
+                                showlegend=False))
+    
+    tickvals_ = list(range(len(df_temp)))
+    ticktext_ = list(df_temp.index)
+    fig.update_layout(
+        xaxis = dict(
+            tickmode = "array",
+            tickvals = tickvals_,
+            ticktext = ticktext_)
+        )
     return fig
 
 
