@@ -43,6 +43,16 @@ names = [{'label': i, 'value':i} for i in df_nameIndex.index]
 
 #%% function with html code
 
+def Marker_size(lenght):
+    """
+    The function is used for the lollipopgraphs to define the sizes of the ticks
+    and to be flexible depending on the number of candidates, that are shown in the graph.
+    """
+    markerList = []
+    for i in range(lenght):
+        markerList.extend([0,10])
+    return markerList
+
 def CodeHTML(textBlack, veganGreen, labelsKommuneList):
     headline = 'Vegetarisk folketingsvalg 2022'
     subheadline = '''Det grønne valg 2022 er Dansk Vegetarisk Forenings 
@@ -128,8 +138,33 @@ in that municipality
 def lollipop_all(value):
     fig = go.Figure()
     df_temp = df_nameIndex[df_nameIndex["Kommune"]==value]
+    df_temp = df_temp.sort_values("Score", ascending = False)
+#    for i, mean in enumerate(df_temp["Score"]):
+#        fig.add_trace(go.Scatter(x=[i,i],y=[0,mean]))
+
+    markerSize = Marker_size(len(df_temp))
+    
+    
     for i, mean in enumerate(df_temp["Score"]):
-        fig.add_trace(go.Scatter(x=[i,i],y=[0,mean]))
+        fig.add_trace(go.Scatter(x=[i,i],y=[0,mean], 
+                                 marker={"color":veggieGreen,"size":markerSize},
+                                line=go.scatter.Line(color=veggieGreen),
+                                showlegend=False))
+    
+    tickvals_ = list(range(len(df_temp)))
+    ticktext_ = list(df_temp.index)
+    fig.update_layout(
+        xaxis = dict(
+            tickmode = "array",
+            tickvals = tickvals_,
+            ticktext = ticktext_)
+        )
+
+
+
+
+
+
 
     return fig 
 
