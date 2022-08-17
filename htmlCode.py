@@ -106,7 +106,6 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                              options= labelsKommuneList,
                              value=kommuneList[0],
                              style={"margin-bottom": '50px'},
-                             id='kommune'
                              ),
 
                 ]),
@@ -188,7 +187,7 @@ def update_lollipop(value):
 
 @app.callback(
     Output('roseChart', 'figure'),
-    [Input('questions', 'value'), Input('kommune', 'value')]
+    [Input('questions', 'value'), Input('kommuneValg', 'value')]
     )
 def updateRoseChart(question, kommune):
     if question == questions[0]: # !!! remember to change to !=
