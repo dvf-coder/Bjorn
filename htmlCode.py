@@ -187,7 +187,7 @@ def update_lollipop(value):
 
 @app.callback(
     Output('roseChart', 'figure'),
-    [Input('questions', 'value'), Input('kommune', 'value')]
+    [Input('questions', 'value'), Input('kommuneValg', 'value')]
     )
 def updateRoseChart(question, kommune):
     if question == questions[0]: # !!! remember to change to !=
