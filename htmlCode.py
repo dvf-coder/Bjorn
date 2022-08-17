@@ -8,12 +8,12 @@ Created on Thu Aug  4 13:39:17 2022
 '''
 # Libraries
 from plotly import graph_objects as go
+import plotly.express as px
 import pandas as pd
 import dash
 from dash.dependencies import Input, Output
-from dash import Dash, html, dcc # Vi bruger forskellige versioner, hvilket betyder at vi skal importere dash forskelligt :/
-#import dash_core_components as dcc
-#import dash_html_components as html
+from dash import Dash, html, dcc 
+
 
 # Load Veggie Data
 
@@ -117,25 +117,33 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                          multi = True),
             dcc.Graph(id = "Lollipop_candidates")
         ]),
-        html.H1(
-            children= 'Vælg et spørgsmål',
-            className="header-description",
-            style={"fontSize": "18px", 
-                   "color": veganGreen,
-                   "text-align": "center",
-                   'background': 'white',
-                   'font': 'Roboto',
-                   "margin-top": "20px", 
-                   "margin-bottom":'10px',
-                   "padding":"1.5%",
-                   "border":"2px black solid"}
-            ),
-        html.Div([
-            dcc.RadioItems(questions,
-                          value = questions[0],
-                          labelStyle={'display': 'inline-block'},
-                          id = 'questions')
-            ])
+        html.Div(
+            children =[
+                html.H1(
+                    children= 'Vælg et spørgsmål',
+                    className="header-description",
+                    style={"fontSize": "18px", 
+                           "color": veganGreen,
+                           "text-align": "center",
+                           'background': 'white',
+                           'font': 'Roboto',
+                           "margin-top": "20px", 
+                           "margin-bottom":'10px',
+                           "padding":"1.5%",
+                           "border":"2px black solid"}
+                    ),
+                html.Div([
+                    dcc.RadioItems(questions,
+                                  value = questions[0],
+                                  labelStyle={'display': 'inline-block'},
+                                  id = 'questions')
+                    ]),
+                html.Div([
+                    dcc.Graph(id = 'roseChart')],
+                    style={'width':'70px', 'margin':'70px'})
+                ])
+        ,
+        
         ],style={'background-color':'white','margin':'2%','display':'inline-block'})
     return component
 
@@ -178,6 +186,37 @@ def update_lollipop(value):
 
     return fig
 
+@app.callback(
+    Output('roseChart', 'figure'),
+    [Input('questions', 'value'), Input('kommune', 'value')]
+    )
+def updateRoseChart(question, kommune):
+    if question == questions[0]: # !!! remember to change to !=
+        dfStorkreds = df[df['Kommune']== kommune]
+        fig = px.bar_polar(
+            data_frame = dfStorkreds,
+            r = question,
+            theta = 'Navn',
+            color = question,
+            template="plotly_white",
+            color_continuous_scale= px.colors.sequential.Greens,
+            width=1200,
+            height=720)
+        fig.update_layout(
+            #Add text to the circle (polar)
+            polar = dict(radialaxis =dict(tickvals=[0,1,2], ticktext=["<b>Uenig</b>","<b>Delvis enig</b>","<b>Enig</b>"])),
+            #Changes the font of the text
+            font=dict(family="Roboto",size=9,color="black"),
+            # Changes the colorbar
+            coloraxis_colorbar=dict(title="<b>Svarmulighed</b>",
+                                    tickvals=[0,1,2],
+                                    ticktext=["Uenig","Delvis enig","Enig"],
+                                    lenmode="pixels", len=420)
+            )
+        fig.update_coloraxes(colorbar_thickness=16, colorbar_xpad=50)
+        # Changing color of text inside polar
+        fig.update_polars(radialaxis_tickfont_color = 'salmon', angularaxis_gridcolor = 'seagreen')
+    return fig
 
 if __name__ == '__main__':
     app.run_server()
