@@ -184,7 +184,11 @@ def update_lollipop(value):
         fig.add_trace(go.Scatter(x=[i,i],y=[0,mean]))
 
     return fig
-
+"""
+Rosechart-graph
+Takes a question and municipality as input.
+Vizualising the answers to the question from each candidate in the chosen municipality
+"""
 @app.callback(
     Output('roseChart', 'figure'),
     [Input('questions', 'value'), Input('kommuneValg', 'value')]
