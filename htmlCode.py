@@ -106,7 +106,6 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                              options= labelsKommuneList,
                              value=kommuneList[0],
                              style={"margin-bottom": '50px'},
-                             id='kommune'
                              ),
 
                 ]),
