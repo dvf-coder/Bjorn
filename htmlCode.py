@@ -12,7 +12,8 @@ import plotly.express as px
 import pandas as pd
 import dash
 from dash.dependencies import Input, Output
-from dash import Dash, html, dcc 
+from dash import Dash, html, dcc
+import pandas as pd 
 
 
 # Load Veggie Data
@@ -21,8 +22,17 @@ df = pd.read_csv("kv21_trimmet_98.csv",
                  dtype={"fips": str})
 df = df.fillna(0) # replace NA values with 0
 df_nameIndex = df.set_index("Navn")
+#%% Adding 5 columns with random answers to imitate the real dataset
+q1Answers = ['Daginstitutioner','Hospitaler, psykiatrien','Plejehjem, plejecentre og offentlig madudbringning til ældre', 'Offentlige arbejdspladser', 'ALLE offentlige institutioner']
+q1Answers.reverse()
+emptyCol =[]
+#df2 = df
+# Adding the five columns with 0 in all observations
+for i in range(len(df)):
+    emptyCol.append(0)
 
-
+for col in q1Answers:
+    df.insert(5, col, emptyCol)
 #%% Definitions from the main-file
 
 # This codeblock contains the variables for the dash-board
@@ -34,13 +44,8 @@ veggieGreen = 'rgb(140,190,84)' # Dark-green for the vegetarian color option !!!
 #Lists
 parties = [] # !!! Add list according to values from survey
 candidates = [] # !!! Add list according to values from survey
-questions = df.columns[5:] # !!! Add questions to this list
+questions = df.columns[10:] # !!! Add questions to this list
 kommuneList = df["Kommune"].unique()  # !!! change list according to values from survey
-
-# Labels and values defined for dropdown menus
-#labelsKommuneList = [{'label': i, 'value':i} for i in kommuneList]
-#names = [{'label': i, 'value':i} for i in df_nameIndex.index]
-#labelsQuestions = [{'label': i, 'value':i} for i in questions]
 
 #%% function with html code
 
