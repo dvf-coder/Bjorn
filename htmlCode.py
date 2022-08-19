@@ -14,6 +14,7 @@ import dash
 from dash.dependencies import Input, Output
 from dash import Dash, html, dcc
 import pandas as pd 
+from random import choice, random
 
 
 # Load Veggie Data
@@ -33,6 +34,20 @@ for i in range(len(df)):
 
 for col in q1Answers:
     df.insert(5, col, emptyCol)
+
+# First value adds random boolean(0,1) to "Alle offentlige institutioner" column.
+# Second value adds random boolean (0,1) to the remaining four columns,
+# depending on the boolean from the "Alle offentlige institutioner" column. 
+q1Questions = df.columns[5:10]
+for i in range(0,len(df)):
+    value = 1 if random() > 0.75 else 0
+    df.loc[i,q1Questions[4]] = value
+    if value == 0:
+        #colList = q1Questions[0:3]
+        for col in q1Questions[0:3]:
+            value2 = 1 if random() > 0.5 else 0
+            df.loc[i,col] = value2
+
 #%% Definitions from the main-file
 
 # This codeblock contains the variables for the dash-board
