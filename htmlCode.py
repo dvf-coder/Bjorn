@@ -23,31 +23,27 @@ df = pd.read_csv("kv21_trimmet_98.csv",
                  dtype={"fips": str})
 df = df.fillna(0) # replace NA values with 0
 df_nameIndex = df.set_index("Navn")
-#%% Adding 5 columns with random answers to imitate the real dataset
+#%% List of the five new columns
 q1Answers = ['Daginstitutioner','Hospitaler, psykiatrien','Plejehjem, plejecentre og offentlig madudbringning til ældre', 'Offentlige arbejdspladser', 'ALLE offentlige institutioner']
-q1Answers.reverse()
-emptyCol =[]
-#df2 = df
-# Adding the five columns with 0 in all observations
-for i in range(len(df)):
-    emptyCol.append(0)
-
-for col in q1Answers:
-    df.insert(5, col, emptyCol)
-
+#Adding the five columns, if not allready added
+if q1Answers[0] not in df.columns:
+    df = df.reindex(columns = df.columns[0:5].tolist() + q1Answers + df.columns[5:].tolist())
+    
 # First value adds random boolean(0,1) to "Alle offentlige institutioner" column.
 # Second value adds random boolean (0,1) to the remaining four columns,
 # depending on the boolean from the "Alle offentlige institutioner" column. 
-q1Questions = df.columns[5:10]
+q1Questions = df.columns[4:9]
 for i in range(0,len(df)):
-    value = 1 if random() > 0.75 else 0
-    df.loc[i,q1Questions[4]] = value
-    if value == 0:
-        #colList = q1Questions[0:3]
-        for col in q1Questions[0:3]:
-            value2 = 1 if random() > 0.5 else 0
+    value = 1 if random() > 0.7 else 0
+    df.loc[i,q1Questions[4:5]] = value
+    for col in q1Questions[0:4]:
+        value2 = 1 if random() > 0.5 else 0
+        if value == 0:
             df.loc[i,col] = value2
-
+        else: 
+            df.loc[i,col] = 0
+#%%
+print(q1Answers[0] in df.columns)
 #%% Definitions from the main-file
 
 # This codeblock contains the variables for the dash-board
