@@ -13,6 +13,7 @@ import pandas as pd
 import dash
 from dash.dependencies import Input, Output
 from dash import Dash, html, dcc 
+from plotly.subplots import make_subplots
 
 
 # Load Veggie Data
@@ -147,8 +148,11 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                 html.Div([
                     dcc.Graph(id = 'roseChart')],
                     style={'width':'70px', 'margin':'70px'})
-                ])
-        ,
+                ]),
+        html.Div([
+            dcc.Graph(id="piecharts"),
+            dcc.Graph(id="sunburst")
+            ])
         
         ],style={'background-color':'white','margin':'2%','display':'inline-block'})
     return component
@@ -287,6 +291,159 @@ def updateRoseChart(question, kommune):
         # Changing color of text inside polar
         fig.update_polars(radialaxis_tickfont_color = 'salmon', angularaxis_gridcolor = 'seagreen')
     return fig
+
+
+"""
+Piecharts for question, kommune and denmark
+The following graph is a subplot of two subplots. Both shows the distribution of 
+answers to the question, that is chosen earlier. One shows the distrubution for 
+the chosen kommune and the other for all of the country.
+IMPORTANT: Doesn't work correctly at the moment
+"""
+@app.callback(
+    Output("piecharts","figure"),
+    [Input("kommuneValg", "value"),Input("questions", "value")]
+    )
+def update_piechart(kommune, question):
+    df_temp =  df_nameIndex[df_nameIndex["Kommune"]==kommune]
+    df_temp = df_temp.sort_values(question, ascending = False)
+    
+    
+    fig_pie = make_subplots(rows=1, cols=2, specs=[[{'type':'domain'}, {'type':'domain'}]])
+    
+    # labels for piechart - kommune
+    value_labels = {0:"Uenig", 1:"Delvist Enig", 2:"Enig"}
+    answers_kommune = pd.Series([value_labels[x] for x in df_temp[question]], 
+                                  index =df_temp.index)
+    labels_kommune = list(answers_kommune.unique())
+    
+    # Value for kommune
+    df_pie = df_temp.groupby(df_temp[question]).count()
+    value_kommune = df_pie["Score"]
+    
+    # Colors kommune
+    color_dict = { "Enig":'rgb(15,122,55)',"Delvist Enig": 'rgb(169,220,163)',"Uenig":'rgb(218,241,212)'}
+    colors_pie = {}
+    for answer in labels_kommune:
+        colors_pie[answer] = color_dict[answer]
+    
+    
+    fig_pie.add_trace(go.Pie(labels=labels_kommune, 
+                                values=value_kommune, 
+                                hole=0.6,
+                                marker_colors = list(colors_pie.values()),
+                                ),row = 1,col = 1)
+    
+    
+    df_pie2 = df_nameIndex.groupby(df_nameIndex[question]).count()
+    values = df_pie2["Score"]
+    labels = ["Uenig", "Delvist Enig", "Enig"]
+    colors = ['rgb(218,241,212)','rgb(169,220,163)','rgb(15,122,55)']
+    
+    
+    fig_pie.add_trace(go.Pie(labels=labels, 
+                                values=values, 
+                                hole=0.6,
+                                marker_colors = colors
+                                ),row = 1,col = 2)
+    
+    
+    fig_pie.add_trace(go.Sunburst(
+        labels=[kommune],
+        parents=[""],
+        values=[1],
+        ), row = 1, col=1)
+    
+    
+    fig_pie.add_trace(go.Sunburst(
+        labels=["Danmark"],
+        parents=[""],
+        values=[1],
+        ), row = 1, col=2)
+    
+    fig_pie.update_layout(
+        autosize=False,
+        width=1200,
+        height=720)
+    return fig_pie
+
+
+
+"""
+Sunburst, answers hierachial with candidates
+The sunburst graph shows a sunburst graph with two layers, the inner layer is the
+possible answers, and the outer is the candidates that has given the answer respectively
+"""
+@app.callback(
+    Output("sunburst","figure"),
+    [Input("kommuneValg", "value"),Input("questions", "value")]
+    )
+def update_sunburst(kommune,question):
+    df_temp =  df_nameIndex[df_nameIndex["Kommune"]==kommune]
+    df_temp = df_temp.sort_values(question, ascending = False)
+    
+    # Parents for sunburst
+    value_labels = {0:"Uenig", 1:"Delvist Enig", 2:"Enig"}
+    parents_candidates = pd.Series([value_labels[x] for x in df_temp[question]], 
+                                  index =df_temp.index)
+    
+    sunburst_parents = []
+    for answer in parents_candidates.unique():
+        sunburst_parents.append("")
+    sunburst_parents.extend(parents_candidates)
+    
+    # Names for sunburst
+    sunburst_names = []
+    
+    inner_names = list(parents_candidates.value_counts(sort=False).index)
+    sunburst_names.extend(inner_names)
+    
+    candidate_names = list(df_temp.index)
+    sunburst_names.extend(candidate_names)
+    
+    # Values for sunburst
+    sunburst_values = []
+    
+    inner_values = list(parents_candidates.value_counts(sort=False))
+    sunburst_values.extend(inner_values)
+    
+    candidate_values = []
+    for candidate in list(df_temp.index):
+        candidate_values.append(1)
+    
+    sunburst_values.extend(candidate_values)
+    
+    fig = go.Figure()
+    
+    color_dict = { "Enig":'rgb(15,122,55)',"Delvist Enig": 'rgb(169,220,163)',"Uenig":'rgb(218,241,212)'}
+    colors_sunburst = {}
+    for answer in parents_candidates.unique():
+        colors_sunburst[answer] = color_dict[answer]
+    
+    data = dict(
+        names=sunburst_names,
+        parent=sunburst_parents,
+        value=sunburst_values)
+    
+    fig.add_trace(go.Sunburst(
+        labels=data['names'],
+        parents=data['parent'],
+        values=data['value'],
+        branchvalues="total",
+        marker_colors = list(colors_sunburst.values()),
+        insidetextorientation='radial',
+        ))
+    fig.update_layout(
+        autosize=False,
+        width=1200,
+        height=720)
+    return fig
+
+
+
+
+
+
 
 if __name__ == '__main__':
     app.run_server()
