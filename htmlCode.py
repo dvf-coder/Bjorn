@@ -70,7 +70,7 @@ H2Style = {"fontSize": "18px",
 #Lists
 parties = [] # !!! Add list according to values from survey
 candidates = [] # !!! Add list according to values from survey
-questions = df_sim.columns[9:] # !!! Add questions to this list
+questions = df.columns[10:] # !!! Add questions to this list
 kommuneList = df["Kommune"].unique()  # !!! change list according to values from survey
 
 #%% function with html code
