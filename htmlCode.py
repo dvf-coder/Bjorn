@@ -158,13 +158,14 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                                   labelStyle={'display': 'inline-block'},
                                   id = 'questions')
                     ]),
-                    # html.Div([
-                    #     dcc.Graph(id = 'roseChart')],
-                    #     style={'width':'70px', 'margin':'70px'})
+                # html.Div([
+                #     dcc.Graph(id = 'roseChart')],
+                #     style={'width':'70px', 'margin':'70px'})
                 ]),
         html.Div([
-            dcc.Graph(id="piecharts"),
-            dcc.Graph(id="sunburst")
+            
+            dcc.Graph(id="sunburst"),
+            dcc.Graph(id="piecharts")
             ])
         
         ],style={'background-color':'white','margin':'2%','display':'inline-block'})
