@@ -12,8 +12,6 @@ import plotly.express as px
 import pandas as pd
 import dash
 from dash.dependencies import Input, Output
-from dash import Dash, html, dcc
-import pandas as pd 
 from random import choice, random
 from dash import Dash, html, dcc 
 from plotly.subplots import make_subplots
