@@ -133,7 +133,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                 ]),
         html.Div(
             children =[
-                html.H1(
+                html.H2(
                     children= 'Vælg et spørgsmål',
                     className="header-description",
                     style={"fontSize": "18px", 
