@@ -42,8 +42,6 @@ for i in range(0,len(df)):
             df.loc[i,col] = value2
         else: 
             df.loc[i,col] = 0
-#%%
-print(q1Answers[0] in df.columns)
 #%% Definitions from the main-file
 
 # This codeblock contains the variables for the dash-board
@@ -128,17 +126,17 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                              ),
                 dcc.Graph(id="candidate_all"),
                 ]),
-        html.H2(
-            children= 'Sammenlign kandidatter fra den valgte kommune',
-            className="header-description",
-            style=H2Style,
-            ),
-        html.Div([
-            dcc.Dropdown(id= "Candidate_dropdown",
-                         placeholder = "Vælg kandidat fra listen",
-                         multi = True),
-            dcc.Graph(id = "Lollipop_candidates")
-        ]),
+        # html.H2(
+        #     children= 'Sammenlign kandidatter fra den valgte kommune',
+        #     className="header-description",
+        #     style=H2Style,
+        #     ),
+        # html.Div([
+        #     dcc.Dropdown(id= "Candidate_dropdown",
+        #                  placeholder = "Vælg kandidat fra listen",
+        #                  multi = True),
+        #     dcc.Graph(id = "Lollipop_candidates")
+        # ]),
         html.Div(
             children =[
                 html.H1(
@@ -160,9 +158,9 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                                   labelStyle={'display': 'inline-block'},
                                   id = 'questions')
                     ]),
-                html.Div([
-                    dcc.Graph(id = 'roseChart')],
-                    style={'width':'70px', 'margin':'70px'})
+                    # html.Div([
+                    #     dcc.Graph(id = 'roseChart')],
+                    #     style={'width':'70px', 'margin':'70px'})
                 ]),
         html.Div([
             dcc.Graph(id="piecharts"),
