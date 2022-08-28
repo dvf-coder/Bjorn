@@ -356,7 +356,7 @@ def update_piechart(kommune, question):
     
     
     fig_pie.add_trace(go.Sunburst(
-        labels=["Danmark"],
+        labels=["Alle kandidater"],
         parents=[""],
         values=[1],
         ), row = 1, col=2)
