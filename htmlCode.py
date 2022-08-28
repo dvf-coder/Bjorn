@@ -15,7 +15,7 @@ from dash.dependencies import Input, Output
 from random import choice, random
 from dash import Dash, html, dcc 
 from plotly.subplots import make_subplots
-
+from PIL import Image
 
 # Load Veggie Data
 
@@ -58,6 +58,7 @@ textBlack = 'rgb(0,0,0)' #Black for text
 veganGreen = 'rgb(16,114,60)' # Light-green for the vegan color option !!! Change for real color
 veggieGreen = 'rgb(140,190,84)' # Dark-green for the vegetarian color option !!! Change for real color
 
+
 H2Style = {"fontSize": "25px", 
             "color": veganGreen,
             "text-align": "center",
@@ -72,6 +73,7 @@ parties = [] # !!! Add list according to values from survey
 candidates = [] # !!! Add list according to values from survey
 questions = df.columns[10:] # !!! Add questions to this list
 kommuneList = df["Kommune"].unique()  # !!! change list according to values from survey
+logo_img = Image.open("dvf_logo.png")
 
 #%% function with html code
 
@@ -95,6 +97,10 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
     component = html.Div([
         html.Div(
             children=[
+                html.Img(
+                    src = logo_img,
+                    height = "90px"
+                    ),
                 html.H1(
                     children= headline, 
                     className='header-title',
