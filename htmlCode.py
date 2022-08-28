@@ -12,6 +12,9 @@ import plotly.express as px
 import pandas as pd
 import dash
 from dash.dependencies import Input, Output
+from dash import Dash, html, dcc
+import pandas as pd 
+from random import choice, random
 from dash import Dash, html, dcc 
 from plotly.subplots import make_subplots
 
@@ -22,8 +25,27 @@ df = pd.read_csv("kv21_trimmet_98.csv",
                  dtype={"fips": str})
 df = df.fillna(0) # replace NA values with 0
 df_nameIndex = df.set_index("Navn")
-
-
+#%% List of the five new columns
+q1Answers = ['Daginstitutioner','Hospitaler, psykiatrien','Plejehjem, plejecentre og offentlig madudbringning til ældre', 'Offentlige arbejdspladser', 'ALLE offentlige institutioner']
+#Adding the five columns, if not allready added
+if q1Answers[0] not in df.columns:
+    df = df.reindex(columns = df.columns[0:5].tolist() + q1Answers + df.columns[5:].tolist())
+    
+# First value adds random boolean(0,1) to "Alle offentlige institutioner" column.
+# Second value adds random boolean (0,1) to the remaining four columns,
+# depending on the boolean from the "Alle offentlige institutioner" column. 
+q1Questions = df.columns[4:9]
+for i in range(0,len(df)):
+    value = 1 if random() > 0.7 else 0
+    df.loc[i,q1Questions[4:5]] = value
+    for col in q1Questions[0:4]:
+        value2 = 1 if random() > 0.5 else 0
+        if value == 0:
+            df.loc[i,col] = value2
+        else: 
+            df.loc[i,col] = 0
+#%%
+print(q1Answers[0] in df.columns)
 #%% Definitions from the main-file
 
 # This codeblock contains the variables for the dash-board
@@ -44,13 +66,8 @@ H2Style = {"fontSize": "18px",
 #Lists
 parties = [] # !!! Add list according to values from survey
 candidates = [] # !!! Add list according to values from survey
-questions = df.columns[5:] # !!! Add questions to this list
+questions = df.columns[10:] # !!! Add questions to this list
 kommuneList = df["Kommune"].unique()  # !!! change list according to values from survey
-
-# Labels and values defined for dropdown menus
-#labelsKommuneList = [{'label': i, 'value':i} for i in kommuneList]
-#names = [{'label': i, 'value':i} for i in df_nameIndex.index]
-#labelsQuestions = [{'label': i, 'value':i} for i in questions]
 
 #%% function with html code
 
