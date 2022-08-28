@@ -418,10 +418,5 @@ def update_sunburst(kommune,question):
     return fig
 
 
-
-
-
-
-
 if __name__ == '__main__':
     app.run_server()
