@@ -15,11 +15,14 @@ from dash.dependencies import Input, Output
 from random import choice, random
 from dash import Dash, html, dcc 
 from plotly.subplots import make_subplots
-
+from PIL import Image
 
 # Load Veggie Data
 
 df = pd.read_csv("kv21_trimmet_98.csv",
+                 dtype={"fips": str})
+
+df_sim = pd.read_excel("data_sim.xlsx",
                  dtype={"fips": str})
 df = df.fillna(0) # replace NA values with 0
 #df_nameIndex = df.set_index("Navn")
@@ -55,11 +58,12 @@ textBlack = 'rgb(0,0,0)' #Black for text
 veganGreen = 'rgb(16,114,60)' # Light-green for the vegan color option !!! Change for real color
 veggieGreen = 'rgb(140,190,84)' # Dark-green for the vegetarian color option !!! Change for real color
 
-H2Style = {"fontSize": "18px", 
-            "color": textBlack,
+
+H2Style = {"fontSize": "25px", 
+            "color": veganGreen,
             "text-align": "center",
             'background': 'white',
-            'font': 'Roboto',
+            'font-family': 'Calibri',
             "margin-top": "20px", 
             "margin-bottom":'10px',
             "padding":"1.5%"}
@@ -69,6 +73,7 @@ parties = [] # !!! Add list according to values from survey
 candidates = [] # !!! Add list according to values from survey
 questions = df.columns[10:] # !!! Add questions to this list
 kommuneList = df["Kommune"].unique()  # !!! change list according to values from survey
+logo_img = Image.open("dvf_logo.png")
 
 #%% function with html code
 
@@ -92,13 +97,17 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
     component = html.Div([
         html.Div(
             children=[
+                html.Img(
+                    src = logo_img,
+                    height = "90px"
+                    ),
                 html.H1(
                     children= headline, 
                     className='header-title',
                     style={'color': veganGreen,
                            'background': 'white',
                            'text-align': 'center',
-                           'font': 'Roboto',
+                           'font-family': 'Calibri',
                            'font-weight': '6200',
                            'margin-top': '-10px',
                            'fontSize': '60px'}
@@ -110,7 +119,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                            'color': textBlack,
                            'text-align': 'center',
                            'background': 'white',
-                           'font': 'Roboto',
+                           'font-family': 'Calibri',
                            'margin-top': '-40px',
                            'margin-bottom':'1px',
                            'padding':'1.5%'},
@@ -136,20 +145,12 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                 html.H2(
                     children= 'Vælg et spørgsmål',
                     className="header-description",
-                    style={"fontSize": "18px", 
-                           "color": veganGreen,
-                           "text-align": "center",
-                           'background': 'white',
-                           'font': 'Roboto',
-                           "margin-top": "20px", 
-                           "margin-bottom":'10px',
-                           "padding":"1.5%",
-                           "border":"2px black solid"}
+                    style=H2Style
                     ),
                 html.Div([
                     dcc.RadioItems(questions,
                                   value = questions[0],
-                                  labelStyle={'display': 'inline-block'},
+                                  labelStyle={'display': 'block'},
                                   id = 'questions')
                     ]),
                 ]),
