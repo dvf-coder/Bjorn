@@ -21,6 +21,9 @@ from plotly.subplots import make_subplots
 
 df = pd.read_csv("kv21_trimmet_98.csv",
                  dtype={"fips": str})
+
+df_sim = pd.read_excel("data_sim.xlsx",
+                 dtype={"fips": str})
 df = df.fillna(0) # replace NA values with 0
 #df_nameIndex = df.set_index("Navn")
 df["Candidate"] = [df['Navn'][i]+f" ({df['Parti'][i][:2]})" for i, x in enumerate(df["Navn"])]
@@ -67,7 +70,7 @@ H2Style = {"fontSize": "18px",
 #Lists
 parties = [] # !!! Add list according to values from survey
 candidates = [] # !!! Add list according to values from survey
-questions = df.columns[10:] # !!! Add questions to this list
+questions = df_sim.columns[9:] # !!! Add questions to this list
 kommuneList = df["Kommune"].unique()  # !!! change list according to values from survey
 
 #%% function with html code
@@ -136,20 +139,12 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                 html.H2(
                     children= 'Vælg et spørgsmål',
                     className="header-description",
-                    style={"fontSize": "18px", 
-                           "color": veganGreen,
-                           "text-align": "center",
-                           'background': 'white',
-                           'font': 'Roboto',
-                           "margin-top": "20px", 
-                           "margin-bottom":'10px',
-                           "padding":"1.5%",
-                           "border":"2px black solid"}
+                    style=H2Style
                     ),
                 html.Div([
                     dcc.RadioItems(questions,
                                   value = questions[0],
-                                  labelStyle={'display': 'inline-block'},
+                                  labelStyle={'display': 'block'},
                                   id = 'questions')
                     ]),
                 ]),
