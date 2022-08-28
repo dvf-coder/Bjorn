@@ -16,6 +16,11 @@ from random import choice, random
 from dash import Dash, html, dcc 
 from plotly.subplots import make_subplots
 from PIL import Image
+import numpy as np
+
+veganGreen = 'rgb(16,114,60)' # Light-green for the vegan color option !!! Change for real color
+veggieGreen = 'rgb(140,190,84)' # Dark-green for the vegetarian color option !!! Change for real color
+
 
 # Load Veggie Data
 
@@ -28,9 +33,16 @@ df = df.fillna(0) # replace NA values with 0
 #df_nameIndex = df.set_index("Navn")
 df["Candidate"] = [df['Navn'][i]+f" ({df['Parti'][i][:2]})" for i, x in enumerate(df["Navn"])]
 df_nameIndex = df.set_index("Candidate")
+# Tilføjer en randomiseret kostkolonne
+df_nameIndex["Kost"] = list(np.random.randint(low=1, high=6,size=len(df_nameIndex)))
+kost_dict = {5: "Kødspiser", 4:"Fleksitar",3:"Pescetar", 2: "Vegetar",1:"Veganer", 6: "Ønsker ikke at svare"}
+kost_color = {"Kødspiser":"red", "Fleksitar":"turquoise","Pescetar":"blue", "Vegetar":veggieGreen,"Veganer":veganGreen
+              ,"Ønsker ikke at svare" : "grey"}
+df_nameIndex["Kost"] = [kost_dict[x] for x in df_nameIndex["Kost"]]
+df_nameIndex["Kost_color"] = [kost_color[x] for x in df_nameIndex["Kost"]]
 
 
-df_nameIndex = df.set_index("Navn")
+
 #%% List of the five new columns
 q1Answers = ['Daginstitutioner','Hospitaler, psykiatrien','Plejehjem, plejecentre og offentlig madudbringning til ældre', 'Offentlige arbejdspladser', 'ALLE offentlige institutioner']
 #Adding the five columns, if not allready added
@@ -55,9 +67,6 @@ for i in range(0,len(df)):
 # This codeblock contains the variables for the dash-board
 #Style
 textBlack = 'rgb(0,0,0)' #Black for text
-veganGreen = 'rgb(16,114,60)' # Light-green for the vegan color option !!! Change for real color
-veggieGreen = 'rgb(140,190,84)' # Dark-green for the vegetarian color option !!! Change for real color
-
 
 H2Style = {"fontSize": "25px", 
             "color": veganGreen,
@@ -77,15 +86,6 @@ logo_img = Image.open("dvf_logo.png")
 
 #%% function with html code
 
-def Marker_size(lenght):
-    """
-    The function is used for the lollipopgraphs to define the sizes of the ticks
-    and to be flexible depending on the number of candidates, that are shown in the graph.
-    """
-    markerList = []
-    for i in range(lenght):
-        markerList.extend([0,10])
-    return markerList
 
 def CodeHTML(textBlack, veganGreen, labelsKommuneList):
     headline = 'Vegetarisk folketingsvalg 2022'
@@ -184,16 +184,19 @@ def lollipop_all(value):
     df_temp = df_nameIndex[df_nameIndex["Kommune"]==value]
     df_temp = df_temp.sort_values("Score", ascending = False)
 
-    markerSize = Marker_size(len(df_temp))
     
     
     for i, mean in enumerate(df_temp["Score"]):
         candidate = df_temp.index[i]
-        fig.add_trace(go.Scatter(x=[i,i],y=[0,mean], 
-                                 marker={"color":veggieGreen,"size":markerSize},
-                                line=go.scatter.Line(color=veggieGreen),
-                                hovertext=[df_temp.loc[candidate]["Parti"],df_temp.loc[candidate]["Parti"]],
-                                showlegend=False))
+        fig.add_trace(go.Scatter(x=[i,i],y=[0,mean],
+                                 marker_size = [0,12],
+                                 marker_color = df_temp["Kost_color"][i],
+                                 line=go.scatter.Line(color=veggieGreen),
+                                 hovertext=[df_temp.loc[candidate]["Parti"],df_temp.loc[candidate]["Parti"]],
+                                 showlegend=False))
+    
+    
+
     
     fig.add_hline(y=df_temp["Score"].mean(), 
             line_width=0.5, 
@@ -229,38 +232,38 @@ def save_data(value):
     return [{"label":x,"value":x} for x in df_nameIndex[df_nameIndex["Kommune"]==value].index]
 
 
-"""
-Lollipop-graph candidates
-The following callback takes multiple dropdown inputs, where the user picks one or several candidates, that are then 
-visualized in a lollipop-graph, that is created in the callback and sent back as output. 
-"""
-@app.callback(
-    Output("Lollipop_candidates", "figure"),
-    Input("Candidate_dropdown", "value")
-    )
-def update_lollipop(value):
-    valueList = list(value)
-    fig = go.Figure()
-    df_temp = df_nameIndex.loc[valueList]
+# """
+# Lollipop-graph candidates
+# The following callback takes multiple dropdown inputs, where the user picks one or several candidates, that are then 
+# visualized in a lollipop-graph, that is created in the callback and sent back as output. 
+# """
+# @app.callback(
+#     Output("Lollipop_candidates", "figure"),
+#     Input("Candidate_dropdown", "value")
+#     )
+# def update_lollipop(value):
+#     valueList = list(value)
+#     fig = go.Figure()
+#     df_temp = df_nameIndex.loc[valueList]
 
-    df_temp = df_temp.sort_values("Score", ascending = False)
-    markerSize = Marker_size(len(df_temp))
+#     df_temp = df_temp.sort_values("Score", ascending = False)
+
     
-    for i, mean in enumerate(df_temp["Score"]):
-        fig.add_trace(go.Scatter(x=[i,i],y=[0,mean], 
-                                 marker={"color":veggieGreen,"size":markerSize},
-                                line=go.scatter.Line(color=veggieGreen),
-                                showlegend=False))
+#     for i, mean in enumerate(df_temp["Score"]):
+#         fig.add_trace(go.Scatter(x=[i,i],y=[0,mean], 
+#                                  marker={"color":veggieGreen,"size":markerSize},
+#                                 line=go.scatter.Line(color=veggieGreen),
+#                                 showlegend=False))
     
-    tickvals_ = list(range(len(df_temp)))
-    ticktext_ = list(df_temp.index)
-    fig.update_layout(
-        xaxis = dict(
-            tickmode = "array",
-            tickvals = tickvals_,
-            ticktext = ticktext_),
-        xaxis_range=[-1,len(df_temp)])
-    return fig
+#     tickvals_ = list(range(len(df_temp)))
+#     ticktext_ = list(df_temp.index)
+#     fig.update_layout(
+#         xaxis = dict(
+#             tickmode = "array",
+#             tickvals = tickvals_,
+#             ticktext = ticktext_),
+#         xaxis_range=[-1,len(df_temp)])
+#     return fig
 
 
 """
