@@ -47,8 +47,6 @@ for i in range(0,len(df)):
             df.loc[i,col] = value2
         else: 
             df.loc[i,col] = 0
-#%%
-print(q1Answers[0] in df.columns)
 #%% Definitions from the main-file
 
 # This codeblock contains the variables for the dash-board
@@ -133,17 +131,17 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                              ),
                 dcc.Graph(id="candidate_all"),
                 ]),
-        html.H2(
-            children= 'Sammenlign kandidatter fra den valgte kommune',
-            className="header-description",
-            style=H2Style,
-            ),
-        html.Div([
-            dcc.Dropdown(id= "Candidate_dropdown",
-                         placeholder = "Vælg kandidat fra listen",
-                         multi = True),
-            dcc.Graph(id = "Lollipop_candidates")
-        ]),
+        # html.H2(
+        #     children= 'Sammenlign kandidatter fra den valgte kommune',
+        #     className="header-description",
+        #     style=H2Style,
+        #     ),
+        # html.Div([
+        #     dcc.Dropdown(id= "Candidate_dropdown",
+        #                  placeholder = "Vælg kandidat fra listen",
+        #                  multi = True),
+        #     dcc.Graph(id = "Lollipop_candidates")
+        # ]),
         html.Div(
             children =[
                 html.H1(
@@ -165,13 +163,14 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                                   labelStyle={'display': 'inline-block'},
                                   id = 'questions')
                     ]),
-                html.Div([
-                    dcc.Graph(id = 'roseChart')],
-                    style={'width':'70px', 'margin':'70px'})
+                # html.Div([
+                #     dcc.Graph(id = 'roseChart')],
+                #     style={'width':'70px', 'margin':'70px'})
                 ]),
         html.Div([
-            dcc.Graph(id="piecharts"),
-            dcc.Graph(id="sunburst")
+            
+            dcc.Graph(id="sunburst"),
+            dcc.Graph(id="piecharts")
             ])
         
         ],style={'background-color':'white','margin':'2%','display':'inline-block'})
@@ -274,42 +273,6 @@ def update_lollipop(value):
             tickvals = tickvals_,
             ticktext = ticktext_),
         xaxis_range=[-1,len(df_temp)])
-    return fig
-"""
-Rosechart-graph
-Takes a question and municipality as input.
-Vizualising the answers to the question from each candidate in the chosen municipality
-"""
-@app.callback(
-    Output('roseChart', 'figure'),
-    [Input('questions', 'value'), Input('kommuneValg', 'value')]
-    )
-def updateRoseChart(question, kommune):
-    if question == questions[0]: # !!! remember to change to !=
-        dfStorkreds = df[df['Kommune']== kommune]
-        fig = px.bar_polar(
-            data_frame = dfStorkreds,
-            r = question,
-            theta = 'Navn',
-            color = question,
-            template="plotly_white",
-            color_continuous_scale= px.colors.sequential.Greens,
-            width=1200,
-            height=720)
-        fig.update_layout(
-            #Add text to the circle (polar)
-            polar = dict(radialaxis =dict(tickvals=[0,1,2], ticktext=["<b>Uenig</b>","<b>Delvis enig</b>","<b>Enig</b>"])),
-            #Changes the font of the text
-            font=dict(family="Roboto",size=9,color="black"),
-            # Changes the colorbar
-            coloraxis_colorbar=dict(title="<b>Svarmulighed</b>",
-                                    tickvals=[0,1,2],
-                                    ticktext=["Uenig","Delvis enig","Enig"],
-                                    lenmode="pixels", len=420)
-            )
-        fig.update_coloraxes(colorbar_thickness=16, colorbar_xpad=50)
-        # Changing color of text inside polar
-        fig.update_polars(radialaxis_tickfont_color = 'salmon', angularaxis_gridcolor = 'seagreen')
     return fig
 
 
@@ -458,11 +421,6 @@ def update_sunburst(kommune,question):
         width=1200,
         height=720)
     return fig
-
-
-
-
-
 
 
 if __name__ == '__main__':
