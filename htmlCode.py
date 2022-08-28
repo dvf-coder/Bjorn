@@ -58,11 +58,11 @@ textBlack = 'rgb(0,0,0)' #Black for text
 veganGreen = 'rgb(16,114,60)' # Light-green for the vegan color option !!! Change for real color
 veggieGreen = 'rgb(140,190,84)' # Dark-green for the vegetarian color option !!! Change for real color
 
-H2Style = {"fontSize": "18px", 
-            "color": textBlack,
+H2Style = {"fontSize": "25px", 
+            "color": veganGreen,
             "text-align": "center",
             'background': 'white',
-            'font': 'Roboto',
+            'font-family': 'Calibri',
             "margin-top": "20px", 
             "margin-bottom":'10px',
             "padding":"1.5%"}
@@ -101,7 +101,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                     style={'color': veganGreen,
                            'background': 'white',
                            'text-align': 'center',
-                           'font': 'Roboto',
+                           'font-family': 'Calibri',
                            'font-weight': '6200',
                            'margin-top': '-10px',
                            'fontSize': '60px'}
@@ -113,7 +113,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                            'color': textBlack,
                            'text-align': 'center',
                            'background': 'white',
-                           'font': 'Roboto',
+                           'font-family': 'Calibri',
                            'margin-top': '-40px',
                            'margin-bottom':'1px',
                            'padding':'1.5%'},
