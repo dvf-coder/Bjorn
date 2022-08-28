@@ -22,6 +22,11 @@ from plotly.subplots import make_subplots
 df = pd.read_csv("kv21_trimmet_98.csv",
                  dtype={"fips": str})
 df = df.fillna(0) # replace NA values with 0
+#df_nameIndex = df.set_index("Navn")
+df["Candidate"] = [df['Navn'][i]+f" ({df['Parti'][i][:2]})" for i, x in enumerate(df["Navn"])]
+df_nameIndex = df.set_index("Candidate")
+
+
 df_nameIndex = df.set_index("Navn")
 #%% List of the five new columns
 q1Answers = ['Daginstitutioner','Hospitaler, psykiatrien','Plejehjem, plejecentre og offentlig madudbringning til ældre', 'Offentlige arbejdspladser', 'ALLE offentlige institutioner']
