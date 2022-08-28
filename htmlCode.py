@@ -131,17 +131,6 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                              ),
                 dcc.Graph(id="candidate_all"),
                 ]),
-        # html.H2(
-        #     children= 'Sammenlign kandidatter fra den valgte kommune',
-        #     className="header-description",
-        #     style=H2Style,
-        #     ),
-        # html.Div([
-        #     dcc.Dropdown(id= "Candidate_dropdown",
-        #                  placeholder = "Vælg kandidat fra listen",
-        #                  multi = True),
-        #     dcc.Graph(id = "Lollipop_candidates")
-        # ]),
         html.Div(
             children =[
                 html.H1(
@@ -163,9 +152,6 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                                   labelStyle={'display': 'inline-block'},
                                   id = 'questions')
                     ]),
-                # html.Div([
-                #     dcc.Graph(id = 'roseChart')],
-                #     style={'width':'70px', 'margin':'70px'})
                 ]),
         html.Div([
             
