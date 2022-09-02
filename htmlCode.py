@@ -187,16 +187,27 @@ def lollipop_all(value):
     
     
     for i, mean in enumerate(df_temp["Score"]):
+
         candidate = df_temp.index[i]
         fig.add_trace(go.Scatter(x=[i,i],y=[0,mean],
                                  marker_size = [0,12],
                                  marker_color = df_temp["Kost_color"][i],
                                  line=go.scatter.Line(color=veggieGreen),
                                  hovertext=[df_temp.loc[candidate]["Parti"],df_temp.loc[candidate]["Parti"]],
-                                 showlegend=False))
-    
-    
+                                 showlegend=False,
+                                 hoverinfo=["none","x+y+text"],
 
+                                 )
+                      )
+    for k, v in kost_color.items():
+        fig.add_trace(go.Scatter(x=[0],y=[0],
+                                 marker_size = [0],
+                                 marker_color = v,
+                                 name=k
+                                ))
+    fig.update_layout(legend= {'itemsizing': 'constant',
+                               # "itemsymbol":"circle"
+                               })
     
     fig.add_hline(y=df_temp["Score"].mean(), 
             line_width=0.5, 
@@ -305,6 +316,7 @@ def update_piechart(kommune, question):
                                 values=value_kommune, 
                                 hole=0.6,
                                 marker_colors = list(colors_pie.values()),
+                                hoverinfo=["x+y+text"]
                                 ),row = 1,col = 1)
     
     
