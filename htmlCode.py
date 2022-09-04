@@ -77,12 +77,25 @@ H2Style = {"fontSize": "25px",
             "margin-bottom":'10px',
             "padding":"1.5%"}
 
+pStyle = {'fontSize': '18px',
+            'color': textBlack,
+            'text-align': 'center',
+            'background': 'white',
+            'font-family': 'Calibri',
+            'margin-top': '-40px',
+            'margin-bottom':'1px',
+            'padding':'1.5%'}
+
 #Lists
 parties = [] # !!! Add list according to values from survey
 candidates = [] # !!! Add list according to values from survey
 questions = df.columns[10:] # !!! Add questions to this list
 kommuneList = df["Kommune"].unique()  # !!! change list according to values from survey
 logo_img = Image.open("dvf_logo.png")
+
+# Placeholder text
+loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+
 
 #%% function with html code
 
@@ -113,16 +126,9 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                            'fontSize': '60px'}
                 ),
                 html.P(
-                    children= subheadline,
+                    children= [subheadline," ", loremIpsum],
                     className='header-description',
-                    style={'fontSize': '18px',
-                           'color': textBlack,
-                           'text-align': 'center',
-                           'background': 'white',
-                           'font-family': 'Calibri',
-                           'margin-top': '-40px',
-                           'margin-bottom':'1px',
-                           'padding':'1.5%'},
+                    style=pStyle,
                 ),
             ], className='header', style={'background': 'white'}
             ),
@@ -131,12 +137,18 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
             className="header-description",
             style=H2Style,
             ),
+        html.P(loremIpsum,
+               style = pStyle),
         html.Div(
             children= [
                 dcc.Dropdown(id='kommuneValg',
                              options= labelsKommuneList,
                              value=kommuneList[0],
-                             style={"margin-bottom": '50px'},
+                             style={"fontSize":"18px",
+                                    "margin-bottom": '50px',
+                                    "margin-left": "10%",
+                                    "margin-right": "20%"
+                                    },
                              ),
                 dcc.Graph(id="candidate_all"),
                 ]),
@@ -147,15 +159,28 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                     className="header-description",
                     style=H2Style
                     ),
+                html.P(loremIpsum,
+                       style=pStyle),
                 html.Div([
                     dcc.RadioItems(questions,
                                   value = questions[0],
                                   labelStyle={'display': 'block'},
+                                  style = {'fontSize': '15px',
+                                            'color': textBlack,
+                                            'text-align': 'left',
+                                            'background': 'white',
+                                            'font-family': 'Calibri',
+                                            'margin-left': '7%',
+                                            'margin-right': '7%',
+                                            'margin-top': '1%'
+                                            # 'padding':'1.5%'
+                                            },
                                   id = 'questions')
                     ]),
                 ]),
-        html.Div([
-            
+        html.H2(style = H2Style,
+                id="question_sunburt"),
+        html.Div([            
             dcc.Graph(id="sunburst"),
             dcc.Graph(id="piecharts")
             ])
@@ -199,6 +224,8 @@ def lollipop_all(value):
 
                                  )
                       )
+    
+    # Adding a hidden scatterplot to add a legend with the dietary choices of the candidates
     for k, v in kost_color.items():
         fig.add_trace(go.Scatter(x=[0],y=[0],
                                  marker_size = [0],
@@ -241,6 +268,13 @@ are chosen.
     Input('kommuneValg', 'value'))
 def save_data(value):
     return [{"label":x,"value":x} for x in df_nameIndex[df_nameIndex["Kommune"]==value].index]
+
+
+@app.callback(
+    Output("question_sunburt","children"),
+    Input("questions","value"))
+def QuestionHeadline(value):
+    return value
 
 
 # """
@@ -290,7 +324,7 @@ IMPORTANT: Doesn't work correctly at the moment
     )
 def update_piechart(kommune, question):
     df_temp =  df_nameIndex[df_nameIndex["Kommune"]==kommune]
-    df_temp = df_temp.sort_values(question, ascending = False)
+    df_temp = df_temp.sort_values(question)
     
     
     fig_pie = make_subplots(rows=1, cols=2, specs=[[{'type':'domain'}, {'type':'domain'}]])
@@ -302,8 +336,7 @@ def update_piechart(kommune, question):
     labels_kommune = list(answers_kommune.unique())
     
     # Value for kommune
-    df_pie = df_temp.groupby(df_temp[question]).count()
-    value_kommune = df_pie["Score"]
+    value_kommune = df_temp.groupby(question)["Score"].count()
     
     # Colors kommune
     color_dict = { "Enig":'rgb(15,122,55)',"Delvist Enig": 'rgb(169,220,163)',"Uenig":'rgb(218,241,212)'}
@@ -316,12 +349,12 @@ def update_piechart(kommune, question):
                                 values=value_kommune, 
                                 hole=0.6,
                                 marker_colors = list(colors_pie.values()),
-                                hoverinfo=["x+y+text"]
+                                showlegend=False
                                 ),row = 1,col = 1)
     
     
-    df_pie2 = df_nameIndex.groupby(df_nameIndex[question]).count()
-    values = df_pie2["Score"]
+    values = df_nameIndex.groupby(question)["Score"].count()
+    
     labels = ["Uenig", "Delvist Enig", "Enig"]
     colors = ['rgb(218,241,212)','rgb(169,220,163)','rgb(15,122,55)']
     
@@ -341,7 +374,7 @@ def update_piechart(kommune, question):
     
     
     fig_pie.add_trace(go.Sunburst(
-        labels=["Alle kandidater"],
+        labels=["Alle Kandidater"],
         parents=[""],
         values=[1],
         ), row = 1, col=2)
@@ -350,6 +383,7 @@ def update_piechart(kommune, question):
         autosize=False,
         width=1200,
         height=720)
+    
     return fig_pie
 
 
@@ -365,7 +399,7 @@ possible answers, and the outer is the candidates that has given the answer resp
     )
 def update_sunburst(kommune,question):
     df_temp =  df_nameIndex[df_nameIndex["Kommune"]==kommune]
-    df_temp = df_temp.sort_values(question, ascending = False)
+    df_temp = df_temp.sort_values(question)
     
     # Parents for sunburst
     value_labels = {0:"Uenig", 1:"Delvist Enig", 2:"Enig"}
