@@ -43,7 +43,7 @@ df_nameIndex["Kost_color"] = [kost_color[x] for x in df_nameIndex["Kost"]]
 
 
 
-#%% List of the five new columns
+# List of the five new columns
 q1Answers = ['Daginstitutioner','Hospitaler, psykiatrien','Plejehjem, plejecentre og offentlig madudbringning til ældre', 'Offentlige arbejdspladser', 'ALLE offentlige institutioner']
 #Adding the five columns, if not allready added
 if q1Answers[0] not in df.columns:
@@ -62,7 +62,7 @@ for i in range(0,len(df)):
             df.loc[i,col] = value2
         else: 
             df.loc[i,col] = 0
-#%% Definitions from the main-file
+# Definitions from the main-file
 
 # This codeblock contains the variables for the dash-board
 #Style
@@ -97,7 +97,7 @@ logo_img = Image.open("dvf_logo.png")
 loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 
 
-#%% function with html code
+# function with html code
 
 
 def CodeHTML(textBlack, veganGreen, labelsKommuneList):
@@ -458,6 +458,6 @@ def update_sunburst(kommune,question):
         height=720)
     return fig
 
-
+server = app.server
 if __name__ == '__main__':
     app.run_server()
