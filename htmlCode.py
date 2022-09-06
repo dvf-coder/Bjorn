@@ -151,6 +151,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                                     },
                              ),
                 dcc.Graph(id="candidate_all"),
+                dcc.Graph(id="candidate_profile")
                 ]),
         html.Div(
             children =[
@@ -268,6 +269,63 @@ are chosen.
     Input('kommuneValg', 'value'))
 def save_data(value):
     return [{"label":x,"value":x} for x in df_nameIndex[df_nameIndex["Kommune"]==value].index]
+
+
+"""
+Candidate profile
+The graph shows the profile for a single candidate given their answers to the questions.
+
+"""
+@app.callback(
+    Output("candidate_profile", "figure"),
+    [Input("candidate_all", "clickData"), Input("kommuneValg","value")]
+    )
+def CandidateProfile(clickData, value):
+    # The dataframe from the candidate_all-graph is remade from the municipality
+    df_temp = df_nameIndex[df_nameIndex["Kommune"]==value]   
+    df_temp = df_temp.sort_values("Score", ascending = False)
+    
+    # From the x-position of the space that is clicked in candidate_all graph the 
+    # candidate is then found in the index-value
+    if clickData == None:
+        candidate = df_temp.index[0]
+    else: 
+        candidate = df_temp.index[clickData["points"][0]["x"]]
+
+    fig = go.Figure()
+    
+    # I make a dictonary, keys are questions and values are answers (0-2)
+    candidate_dict = dict(df_nameIndex.loc[candidate][5:21])
+    
+    # Tickvalues are a list from 0 to x, x being the number of questions in the questionaire
+    tickvals_ = list(range(len(candidate_dict.keys())))
+    
+    for i, answer in enumerate(candidate_dict.values()):
+        fig.add_trace(go.Scatter(x= [i+1,i+1], y=[0, answer],
+                                 showlegend=False,
+                                 marker_size = [0,12],
+                                 marker_color = veggieGreen,
+                                 line_color = veggieGreen,
+                                ))
+    
+    fig.update_layout(yaxis = dict(range=[-0.1,2.1],
+                                   tickmode= "array",
+                                  tickvals=[0,1,2],
+                                  ticktext= ["Uenig", "Delvist Enig", "Enig"]),
+                     xaxis = dict(range = [0,max(tickvals_)+2],
+                                tickmode= "array",
+                                tickvals= [x+1 for x in tickvals_],
+                                ticktext = [x+1 for x in tickvals_],
+                                title= "Spørgsmål"),
+                     title= dict(text=candidate,
+                                 y=0.9,
+                                 x=0.5
+                     ))    
+
+    return fig
+
+
+
 
 
 @app.callback(
