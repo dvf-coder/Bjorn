@@ -17,7 +17,11 @@ from dash import Dash, html, dcc
 from plotly.subplots import make_subplots
 from PIL import Image
 import numpy as np
+import os
 
+print(os.getcwd())
+
+#%%
 veganGreen = 'rgb(16,114,60)' # Light-green for the vegan color option !!! Change for real color
 veggieGreen = 'rgb(140,190,84)' # Dark-green for the vegetarian color option !!! Change for real color
 
