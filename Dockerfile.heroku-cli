@@ -4,5 +4,5 @@ RUN apt-get update
 RUN apt-get install -y curl gnupg2 git
 
 RUN curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
-# RUN rm -rf /var/lib/apt/lists /var/cache/apt/*
+RUN rm -rf /var/lib/apt/lists /var/cache/apt/*
 USER 1000:1000
