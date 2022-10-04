@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 '''
@@ -13,7 +12,7 @@ import pandas as pd
 import dash
 from dash.dependencies import Input, Output
 from random import choice, random
-from dash import Dash, html, dcc 
+from dash import Dash, html, dcc
 from plotly.subplots import make_subplots
 from PIL import Image
 import numpy as np
@@ -49,10 +48,10 @@ q1Answers = ['Daginstitutioner','Hospitaler, psykiatrien','Plejehjem, plejecentr
 #Adding the five columns, if not allready added
 if q1Answers[0] not in df.columns:
     df = df.reindex(columns = df.columns[0:5].tolist() + q1Answers + df.columns[5:].tolist())
-    
+
 # First value adds random boolean(0,1) to "Alle offentlige institutioner" column.
 # Second value adds random boolean (0,1) to the remaining four columns,
-# depending on the boolean from the "Alle offentlige institutioner" column. 
+# depending on the boolean from the "Alle offentlige institutioner" column.
 q1Questions = df.columns[4:9]
 for i in range(0,len(df)):
     value = 1 if random() > 0.7 else 0
@@ -61,7 +60,7 @@ for i in range(0,len(df)):
         value2 = 1 if random() > 0.5 else 0
         if value == 0:
             df.loc[i,col] = value2
-        else: 
+        else:
             df.loc[i,col] = 0
 # Definitions from the main-file
 
@@ -69,12 +68,12 @@ for i in range(0,len(df)):
 #Style
 textBlack = 'rgb(0,0,0)' #Black for text
 
-H2Style = {"fontSize": "25px", 
+H2Style = {"fontSize": "25px",
             "color": veganGreen,
             "text-align": "center",
             'background': 'white',
             'font-family': 'Calibri',
-            "margin-top": "20px", 
+            "margin-top": "20px",
             "margin-bottom":'10px',
             "padding":"1.5%"}
 
@@ -103,10 +102,10 @@ loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do ei
 
 def CodeHTML(textBlack, veganGreen, labelsKommuneList):
     headline = 'Vegetarisk folketingsvalg 2022'
-    subheadline = '''Det grønne valg 2022 er Dansk Vegetarisk Forenings 
-    valgundersøgelse forud for folketingsvalget. 
+    subheadline = '''Det grønne valg 2022 er Dansk Vegetarisk Forenings
+    valgundersøgelse forud for folketingsvalget.
     Her kan du finde ud af, hvad dine kandidater fra din storkreds vil gøre
-    for at fremme grønne måltider i kommunens køkkener – 
+    for at fremme grønne måltider i kommunens køkkener –
     og på andre måder fremme en omstilling af mad og landbrug.'''
     component = html.Div([
         html.Div(
@@ -116,7 +115,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                     height = "90px"
                     ),
                 html.H1(
-                    children= headline, 
+                    children= headline,
                     className='header-title',
                     style={'color': veganGreen,
                            'background': 'white',
@@ -181,11 +180,11 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                 ]),
         html.H2(style = H2Style,
                 id="question_sunburt"),
-        html.Div([            
+        html.Div([
             dcc.Graph(id="sunburst"),
             dcc.Graph(id="piecharts")
             ])
-        
+
         ],style={'background-color':'white','margin':'2%','display':'inline-block'})
     return component
 
@@ -193,12 +192,10 @@ app = dash.Dash()
 app.layout = CodeHTML(textBlack, veganGreen, kommuneList)
 
 # dash code
-# Start the dash-board
-server = app.server
 
 """
 lollipop-graph municipality
-The following callback takes the choice of municipality as input an creates a subsection of 
+The following callback takes the choice of municipality as input an creates a subsection of
 the dataframe, this is then used to make a lollipop graph for the scores of the candidates
 in that municipality
 """
@@ -210,8 +207,8 @@ def lollipop_all(value):
     df_temp = df_nameIndex[df_nameIndex["Kommune"]==value]
     df_temp = df_temp.sort_values("Score", ascending = False)
 
-    
-    
+
+
     for i, mean in enumerate(df_temp["Score"]):
 
         candidate = df_temp.index[i]
@@ -225,7 +222,7 @@ def lollipop_all(value):
 
                                  )
                       )
-    
+
     # Adding a hidden scatterplot to add a legend with the dietary choices of the candidates
     for k, v in kost_color.items():
         fig.add_trace(go.Scatter(x=[0],y=[0],
@@ -236,16 +233,16 @@ def lollipop_all(value):
     fig.update_layout(legend= {'itemsizing': 'constant',
                                # "itemsymbol":"circle"
                                })
-    
-    fig.add_hline(y=df_temp["Score"].mean(), 
-            line_width=0.5, 
-            line_dash="dash", 
+
+    fig.add_hline(y=df_temp["Score"].mean(),
+            line_width=0.5,
+            line_dash="dash",
             line_color=veggieGreen,
-            annotation_text="Kommune gennemsnit", 
+            annotation_text="Kommune gennemsnit",
             annotation_position="bottom right")
-    
-    
-    
+
+
+
     tickvals_ = list(range(len(df_temp)))
     ticktext_ = list(df_temp.index)
     fig.update_layout(
@@ -255,11 +252,11 @@ def lollipop_all(value):
             ticktext = ticktext_),
         title = {"text":f"Kandidater for {value}"}
         )
-    return fig 
+    return fig
 
 """
 Candidates from the kommune/storkreds
-The following callback takes a municipality as input from a dropdown, and from this it creates an output of the 
+The following callback takes a municipality as input from a dropdown, and from this it creates an output of the
 candidates for that municipality.
 This output is sent as options for the Dropdown menu below(in the html code), where candidates for the lollipop-graph
 are chosen.
@@ -280,8 +277,8 @@ def QuestionHeadline(value):
 
 # """
 # Lollipop-graph candidates
-# The following callback takes multiple dropdown inputs, where the user picks one or several candidates, that are then 
-# visualized in a lollipop-graph, that is created in the callback and sent back as output. 
+# The following callback takes multiple dropdown inputs, where the user picks one or several candidates, that are then
+# visualized in a lollipop-graph, that is created in the callback and sent back as output.
 # """
 # @app.callback(
 #     Output("Lollipop_candidates", "figure"),
@@ -294,13 +291,13 @@ def QuestionHeadline(value):
 
 #     df_temp = df_temp.sort_values("Score", ascending = False)
 
-    
+
 #     for i, mean in enumerate(df_temp["Score"]):
-#         fig.add_trace(go.Scatter(x=[i,i],y=[0,mean], 
+#         fig.add_trace(go.Scatter(x=[i,i],y=[0,mean],
 #                                  marker={"color":veggieGreen,"size":markerSize},
 #                                 line=go.scatter.Line(color=veggieGreen),
 #                                 showlegend=False))
-    
+
 #     tickvals_ = list(range(len(df_temp)))
 #     ticktext_ = list(df_temp.index)
 #     fig.update_layout(
@@ -314,8 +311,8 @@ def QuestionHeadline(value):
 
 """
 Piecharts for question, kommune and denmark
-The following graph is a subplot of two subplots. Both shows the distribution of 
-answers to the question, that is chosen earlier. One shows the distrubution for 
+The following graph is a subplot of two subplots. Both shows the distribution of
+answers to the question, that is chosen earlier. One shows the distrubution for
 the chosen kommune and the other for all of the country.
 IMPORTANT: Doesn't work correctly at the moment
 """
@@ -326,65 +323,65 @@ IMPORTANT: Doesn't work correctly at the moment
 def update_piechart(kommune, question):
     df_temp =  df_nameIndex[df_nameIndex["Kommune"]==kommune]
     df_temp = df_temp.sort_values(question)
-    
-    
+
+
     fig_pie = make_subplots(rows=1, cols=2, specs=[[{'type':'domain'}, {'type':'domain'}]])
-    
+
     # labels for piechart - kommune
     value_labels = {0:"Uenig", 1:"Delvist Enig", 2:"Enig"}
-    answers_kommune = pd.Series([value_labels[x] for x in df_temp[question]], 
+    answers_kommune = pd.Series([value_labels[x] for x in df_temp[question]],
                                   index =df_temp.index)
     labels_kommune = list(answers_kommune.unique())
-    
+
     # Value for kommune
     value_kommune = df_temp.groupby(question)["Score"].count()
-    
+
     # Colors kommune
     color_dict = { "Enig":'rgb(15,122,55)',"Delvist Enig": 'rgb(169,220,163)',"Uenig":'rgb(218,241,212)'}
     colors_pie = {}
     for answer in labels_kommune:
         colors_pie[answer] = color_dict[answer]
-    
-    
-    fig_pie.add_trace(go.Pie(labels=labels_kommune, 
-                                values=value_kommune, 
+
+
+    fig_pie.add_trace(go.Pie(labels=labels_kommune,
+                                values=value_kommune,
                                 hole=0.6,
                                 marker_colors = list(colors_pie.values()),
                                 showlegend=False
                                 ),row = 1,col = 1)
-    
-    
+
+
     values = df_nameIndex.groupby(question)["Score"].count()
-    
+
     labels = ["Uenig", "Delvist Enig", "Enig"]
     colors = ['rgb(218,241,212)','rgb(169,220,163)','rgb(15,122,55)']
-    
-    
-    fig_pie.add_trace(go.Pie(labels=labels, 
-                                values=values, 
+
+
+    fig_pie.add_trace(go.Pie(labels=labels,
+                                values=values,
                                 hole=0.6,
                                 marker_colors = colors
                                 ),row = 1,col = 2)
-    
-    
+
+
     fig_pie.add_trace(go.Sunburst(
         labels=[kommune],
         parents=[""],
         values=[1],
         ), row = 1, col=1)
-    
-    
+
+
     fig_pie.add_trace(go.Sunburst(
         labels=["Alle Kandidater"],
         parents=[""],
         values=[1],
         ), row = 1, col=2)
-    
+
     fig_pie.update_layout(
         autosize=False,
         width=1200,
         height=720)
-    
+
     return fig_pie
 
 
@@ -401,50 +398,50 @@ possible answers, and the outer is the candidates that has given the answer resp
 def update_sunburst(kommune,question):
     df_temp =  df_nameIndex[df_nameIndex["Kommune"]==kommune]
     df_temp = df_temp.sort_values(question)
-    
+
     # Parents for sunburst
     value_labels = {0:"Uenig", 1:"Delvist Enig", 2:"Enig"}
-    parents_candidates = pd.Series([value_labels[x] for x in df_temp[question]], 
+    parents_candidates = pd.Series([value_labels[x] for x in df_temp[question]],
                                   index =df_temp.index)
-    
+
     sunburst_parents = []
     for answer in parents_candidates.unique():
         sunburst_parents.append("")
     sunburst_parents.extend(parents_candidates)
-    
+
     # Names for sunburst
     sunburst_names = []
-    
+
     inner_names = list(parents_candidates.value_counts(sort=False).index)
     sunburst_names.extend(inner_names)
-    
+
     candidate_names = list(df_temp.index)
     sunburst_names.extend(candidate_names)
-    
+
     # Values for sunburst
     sunburst_values = []
-    
+
     inner_values = list(parents_candidates.value_counts(sort=False))
     sunburst_values.extend(inner_values)
-    
+
     candidate_values = []
     for candidate in list(df_temp.index):
         candidate_values.append(1)
-    
+
     sunburst_values.extend(candidate_values)
-    
+
     fig = go.Figure()
-    
+
     color_dict = { "Enig":'rgb(15,122,55)',"Delvist Enig": 'rgb(169,220,163)',"Uenig":'rgb(218,241,212)'}
     colors_sunburst = {}
     for answer in parents_candidates.unique():
         colors_sunburst[answer] = color_dict[answer]
-    
+
     data = dict(
         names=sunburst_names,
         parent=sunburst_parents,
         value=sunburst_values)
-    
+
     fig.add_trace(go.Sunburst(
         labels=data['names'],
         parents=data['parent'],
