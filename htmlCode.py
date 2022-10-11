@@ -33,8 +33,14 @@ df_sim = pd.read_excel("data_sim.xlsx",
 df = df.fillna(0) # replace NA values with 0
 
 #Renaming columns for ease of use
-df.rename(columns = {"Dit fulde navnAngiv venligst det navn du opstiller under": "Navn"}, inplace = True)
-
+df.rename(columns = {"Dit fulde navnAngiv venligst det navn du opstiller under": "Navn",
+                     "Hvilket parti stiller du op for?":"Parti",
+                     "Hvilken af følgende beskrivelser synes du passer bedst på dig selv?": "Kost",
+                     "I hvilken storkreds er du opstillet?": "Storkreds"}, inplace = True)
+#%% 15
+test_col = df.columns[9:10] + df.columns[15:31]
+print(test_col)
+#%%
 #df_nameIndex = df.set_index("Navn")
 df["Candidate"] = [df['Navn'][i]+f" ({df['Parti'][i][:2]})" for i, x in enumerate(df["Navn"])]
 df_nameIndex = df.set_index("Candidate")
@@ -94,7 +100,7 @@ pStyle = {'fontSize': '18px',
 #Lists
 parties = [] # !!! Add list according to values from survey
 candidates = [] # !!! Add list according to values from survey
-questions = df.columns[10:] # !!! Add questions to this list
+questions = df.columns[9:10] + df.columns[15:31] # !!! Add questions to this list
 kommuneList = df["Kommune"].unique()  # !!! change list according to values from survey
 logo_img = Image.open("dvf_logo.png")
 
