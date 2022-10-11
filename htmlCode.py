@@ -150,7 +150,8 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                                     "margin-right": "20%"
                                     },
                              ),
-                dcc.Graph(id="candidate_all"),
+                dcc.Graph(id="candidate_all",
+                          config = dict(staticPlot = True)),
                 dcc.Graph(id="candidate_profile")
                 ]),
         html.Div(
@@ -206,14 +207,14 @@ in that municipality
 def lollipop_all(value):
     fig = go.Figure()
     df_temp = df_nameIndex[df_nameIndex["Kommune"]==value]
-    df_temp = df_temp.sort_values("Score", ascending = False)
+    df_temp = df_temp.sort_values("Score")
 
 
 
     for i, mean in enumerate(df_temp["Score"]):
 
         candidate = df_temp.index[i]
-        fig.add_trace(go.Scatter(x=[i,i],y=[0,mean],
+        fig.add_trace(go.Scatter(y=[i,i],x=[0,mean],
                                  marker_size = [0,12],
                                  marker_color = df_temp["Kost_color"][i],
                                  line=go.scatter.Line(color=veggieGreen),
@@ -235,19 +236,19 @@ def lollipop_all(value):
                                # "itemsymbol":"circle"
                                })
 
-    fig.add_hline(y=df_temp["Score"].mean(),
-            line_width=0.5,
-            line_dash="dash",
-            line_color=veggieGreen,
-            annotation_text="Kommune gennemsnit",
-            annotation_position="bottom right")
+#    fig.add_hline(y=df_temp["Score"].mean(),
+#            line_width=0.5,
+#            line_dash="dash",
+#            line_color=veggieGreen,
+#            annotation_text="Kommune gennemsnit",
+#            annotation_position="bottom right")
 
 
 
     tickvals_ = list(range(len(df_temp)))
     ticktext_ = list(df_temp.index)
     fig.update_layout(
-        xaxis = dict(
+        yaxis = dict(
             tickmode = "array",
             tickvals = tickvals_,
             ticktext = ticktext_),
