@@ -24,12 +24,17 @@ veggieGreen = 'rgb(140,190,84)' # Dark-green for the vegetarian color option !!!
 
 # Load Veggie Data
 
-df = pd.read_csv("kv21_trimmet_98.csv",
+df = pd.read_csv("data\gront_valg_2022.csv",
                  dtype={"fips": str})
-
+df_test = pd.read_csv("kv21_trimmet_98.csv",
+                 dtype={"fips": str})
 df_sim = pd.read_excel("data_sim.xlsx",
                  dtype={"fips": str})
 df = df.fillna(0) # replace NA values with 0
+
+#Renaming columns for ease of use
+df.rename(columns = {"Dit fulde navnAngiv venligst det navn du opstiller under": "Navn"}, inplace = True)
+
 #df_nameIndex = df.set_index("Navn")
 df["Candidate"] = [df['Navn'][i]+f" ({df['Parti'][i][:2]})" for i, x in enumerate(df["Navn"])]
 df_nameIndex = df.set_index("Candidate")
