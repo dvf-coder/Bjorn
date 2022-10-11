@@ -51,9 +51,9 @@ df_nameIndex["Kost"] = [kost_dict[x] for x in df_nameIndex["Kost"]]
 df_nameIndex["Kost_color"] = [kost_color[x] for x in df_nameIndex["Kost"]]
 
 
-
-# List of the five new columns
-q1Answers = ['Daginstitutioner','Hospitaler, psykiatrien','Plejehjem, plejecentre og offentlig madudbringning til ældre', 'Offentlige arbejdspladser', 'ALLE offentlige institutioner']
+"""
+# List of the f"ive new columns
+"q1Answers = ['Daginstitutioner','Hospitaler, psykiatrien','Plejehjem, plejecentre og offentlig madudbringning til ældre', 'Offentlige arbejdspladser', 'ALLE offentlige institutioner']
 #Adding the five columns, if not allready added
 if q1Answers[0] not in df.columns:
     df = df.reindex(columns = df.columns[0:5].tolist() + q1Answers + df.columns[5:].tolist())
@@ -71,6 +71,7 @@ for i in range(0,len(df)):
             df.loc[i,col] = value2
         else:
             df.loc[i,col] = 0
+"""
 # Definitions from the main-file
 
 # This codeblock contains the variables for the dash-board
@@ -98,7 +99,10 @@ pStyle = {'fontSize': '18px',
 #Lists
 parties = [] # !!! Add list according to values from survey
 candidates = [] # !!! Add list according to values from survey
-questions = df.columns[9:10] + df.columns[15:31] # !!! Add questions to this list
+questions =  df.columns[9:10]
+test = df.columns[15:31] #How to combine these two questions?
+
+#%%
 storKredsList = df["Storkreds"].unique()  # change list according to values from survey
 storKredsList = storKredsList[1:len(storKredsList)] 
 
