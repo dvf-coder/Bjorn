@@ -152,7 +152,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                              ),
                 dcc.Graph(id="candidate_all",
                           config = dict(staticPlot = True)),
-                dcc.Graph(id="candidate_profile")
+                #dcc.Graph(id="candidate_profile")
                 ]),
         html.Div(
             children =[
@@ -272,8 +272,9 @@ def save_data(value):
 
 """
 Candidate profile
-The graph shows the profile for a single candidate given their answers to the questions.
+The graph shows the profile for a single ca"ndidate given their answers to the questions.
 
+"""
 """
 @app.callback(
     Output("candidate_profile", "figure"),
@@ -322,7 +323,7 @@ def CandidateProfile(clickData, value):
                      ))    
 
     return fig
-
+"""
 
 
 
