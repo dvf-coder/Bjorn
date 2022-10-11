@@ -37,9 +37,7 @@ df.rename(columns = {"Dit fulde navnAngiv venligst det navn du opstiller under":
                      "Hvilket parti stiller du op for?":"Parti",
                      "Hvilken af følgende beskrivelser synes du passer bedst på dig selv?": "Kost",
                      "I hvilken storkreds er du opstillet?": "Storkreds"}, inplace = True)
-#%% 15
-test_col = df.columns[9:10] + df.columns[15:31]
-print(test_col)
+
 #%%
 #df_nameIndex = df.set_index("Navn")
 df["Candidate"] = [df['Navn'][i]+f" ({df['Parti'][i][:2]})" for i, x in enumerate(df["Navn"])]
@@ -101,7 +99,10 @@ pStyle = {'fontSize': '18px',
 parties = [] # !!! Add list according to values from survey
 candidates = [] # !!! Add list according to values from survey
 questions = df.columns[9:10] + df.columns[15:31] # !!! Add questions to this list
-kommuneList = df["Kommune"].unique()  # !!! change list according to values from survey
+storKredsList = df["Storkreds"].unique()  # change list according to values from survey
+storKredsList = storKredsList[1:len(storKredsList)] 
+
+#%%
 logo_img = Image.open("dvf_logo.png")
 
 # Placeholder text
@@ -111,7 +112,7 @@ loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do ei
 # function with html code
 
 
-def CodeHTML(textBlack, veganGreen, labelsKommuneList):
+def CodeHTML(textBlack, veganGreen, labelsstorKredsList):
     headline = 'Vegetarisk folketingsvalg 2022'
     subheadline = '''Det grønne valg 2022 er Dansk Vegetarisk Forenings
     valgundersøgelse forud for folketingsvalget.
@@ -153,8 +154,8 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
         html.Div(
             children= [
                 dcc.Dropdown(id='kommuneValg',
-                             options= labelsKommuneList,
-                             value=kommuneList[0],
+                             options= labelsstorKredsList,
+                             value=storKredsList[0],
                              style={"fontSize":"18px",
                                     "margin-bottom": '50px',
                                     "margin-left": "10%",
@@ -202,7 +203,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
     return component
 
 app = dash.Dash()
-app.layout = CodeHTML(textBlack, veganGreen, kommuneList)
+app.layout = CodeHTML(textBlack, veganGreen, storKredsList)
 
 # dash code
 
