@@ -38,7 +38,7 @@ df.rename(columns = {"Dit fulde navnAngiv venligst det navn du opstiller under":
                      "Hvilken af følgende beskrivelser synes du passer bedst på dig selv?": "Kost",
                      "I hvilken storkreds er du opstillet?": "Storkreds"}, inplace = True)
 
-#%%
+
 #df_nameIndex = df.set_index("Navn")
 df["Candidate"] = [df['Navn'][i]+f" ({df['Parti'][i][:2]})" for i, x in enumerate(df["Navn"])]
 df_nameIndex = df.set_index("Candidate")
@@ -102,11 +102,11 @@ candidates = [] # !!! Add list according to values from survey
 questions =  df.columns[9:10]
 test = df.columns[15:31] #How to combine these two questions?
 
-#%%
+
 storKredsList = df["Storkreds"].unique()  # change list according to values from survey
 storKredsList = storKredsList[1:len(storKredsList)] 
 
-#%%
+
 logo_img = Image.open("dvf_logo.png")
 
 # Placeholder text
