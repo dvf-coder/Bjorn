@@ -94,7 +94,7 @@ kommuneList = df_nameIndex["Storkreds"].unique()  # !!! change list according to
 logo_img = Image.open("dvf_logo.png")
 
 # Placeholder text
-loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+#loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 
 
 # function with html code
@@ -102,11 +102,11 @@ loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do ei
 
 def CodeHTML(textBlack, veganGreen, labelsKommuneList):
     headline = 'Vegetarisk folketingsvalg 2022'
-    subheadline = '''Det grønne valg 2022 er Dansk Vegetarisk Forenings
-    valgundersøgelse forud for folketingsvalget.
-    Her kan du finde ud af, hvad dine kandidater fra din storkreds vil gøre
-    for at fremme grønne måltider i kommunens køkkener –
-    og på andre måder fremme en omstilling af mad og landbrug.'''
+    subheadline = '''Den grønne valgundersøgelse 2022 er Dansk Vegetarisk Forenings valgundersøgelse forud for folketingsvalget.
+    Her kan du finde ud af, hvad dine kandidater fra din storkreds vil gøre for at fremme grønne måltider, fødevarer,
+    omstillingen af landbruget og hvordan de vil finansiere den grønne omstilling. 
+    Du kan klikke dig ind på specifikke spørgsmål eller kandidater og undersøge deres svar, imens du selv tager stilling. 
+    God fornøjelse!'''
     component = html.Div([
         html.Div(
             children=[
@@ -126,7 +126,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                            'fontSize': '60px'}
                 ),
                 html.P(
-                    children= [subheadline," ", loremIpsum],
+                    children= [subheadline],
                     className='header-description',
                     style=pStyle,
                 ),
@@ -137,7 +137,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
             className="header-description",
             style=H2Style,
             ),
-        html.P(loremIpsum,
+        html.P('Herunder kan du vælge din storkreds, så du kun får resultater fra kandidater, du kan stemme på i dit område.',
                style = pStyle),
         html.Div(
             children= [
@@ -161,7 +161,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                     className="header-description",
                     style=H2Style
                     ),
-                html.P(loremIpsum,
+                html.P('Herunder kan du vælge specifikke spørgsmål og se, hvad kandidaterne har svaret på disse.',
                        style=pStyle),
                 html.Div([
                     dcc.RadioItems(questions,
