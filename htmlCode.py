@@ -24,44 +24,44 @@ veggieGreen = 'rgb(140,190,84)' # Dark-green for the vegetarian color option !!!
 
 # Load Veggie Data
 
-df = pd.read_csv("kv21_trimmet_98.csv",
+df_nameIndex = pd.read_csv("data/fv_data.csv",
                  dtype={"fips": str})
 
 df_sim = pd.read_excel("data_sim.xlsx",
                  dtype={"fips": str})
-df = df.fillna(0) # replace NA values with 0
+#df = df.fillna(0) # replace NA values with 0
 #df_nameIndex = df.set_index("Navn")
-df["Candidate"] = [df['Navn'][i]+f" ({df['Parti'][i][:2]})" for i, x in enumerate(df["Navn"])]
-df_nameIndex = df.set_index("Candidate")
+#df["Candidate"] = [df['Navn'][i]+f" ({df['Parti'][i][:2]})" for i, x in enumerate(df["Navn"])]
+df_nameIndex = df_nameIndex.set_index("Navn")
 # Tilføjer en randomiseret kostkolonne
-df_nameIndex["Kost"] = list(np.random.randint(low=1, high=6,size=len(df_nameIndex)))
-kost_dict = {5: "Kødspiser", 4:"Fleksitar",3:"Pescetar", 2: "Vegetar",1:"Veganer", 6: "Ønsker ikke at svare"}
+#df_nameIndex["Kost"] = list(np.random.randint(low=1, high=6,size=len(df_nameIndex)))
+#kost_dict = {5: "Kødspiser", 4:"Fleksitar",3:"Pescetar", 2: "Vegetar",1:"Veganer", 6: "Ønsker ikke at svare"}
 kost_color = {"Kødspiser":"red", "Fleksitar":"turquoise","Pescetar":"blue", "Vegetar":veggieGreen,"Veganer":veganGreen
               ,"Ønsker ikke at svare" : "grey"}
-df_nameIndex["Kost"] = [kost_dict[x] for x in df_nameIndex["Kost"]]
-df_nameIndex["Kost_color"] = [kost_color[x] for x in df_nameIndex["Kost"]]
+#df_nameIndex["Kost"] = [kost_dict[x] for x in df_nameIndex["Kost"]]
+#df_nameIndex["Kost_color"] = [kost_color[x] for x in df_nameIndex["Kost"]]
 
 
 
 # List of the five new columns
-q1Answers = ['Daginstitutioner','Hospitaler, psykiatrien','Plejehjem, plejecentre og offentlig madudbringning til ældre', 'Offentlige arbejdspladser', 'ALLE offentlige institutioner']
+#q1Answers = ['Daginstitutioner','Hospitaler, psykiatrien','Plejehjem, plejecentre og offentlig madudbringning til ældre', 'Offentlige arbejdspladser', 'ALLE offentlige institutioner']
 #Adding the five columns, if not allready added
-if q1Answers[0] not in df.columns:
-    df = df.reindex(columns = df.columns[0:5].tolist() + q1Answers + df.columns[5:].tolist())
+#if q1Answers[0] not in df.columns:
+#    df = df.reindex(columns = df.columns[0:5].tolist() + q1Answers + df.columns[5:].tolist())
 
 # First value adds random boolean(0,1) to "Alle offentlige institutioner" column.
 # Second value adds random boolean (0,1) to the remaining four columns,
 # depending on the boolean from the "Alle offentlige institutioner" column.
-q1Questions = df.columns[4:9]
-for i in range(0,len(df)):
-    value = 1 if random() > 0.7 else 0
-    df.loc[i,q1Questions[4:5]] = value
-    for col in q1Questions[0:4]:
-        value2 = 1 if random() > 0.5 else 0
-        if value == 0:
-            df.loc[i,col] = value2
-        else:
-            df.loc[i,col] = 0
+#q1Questions = df.columns[4:9]
+#for i in range(0,len(df)):
+#    value = 1 if random() > 0.7 else 0
+#    df.loc[i,q1Questions[4:5]] = value
+#    for col in q1Questions[0:4]:
+#        value2 = 1 if random() > 0.5 else 0
+#        if value == 0:
+#            df.loc[i,col] = value2
+#        else:
+#            df.loc[i,col] = 0
 # Definitions from the main-file
 
 # This codeblock contains the variables for the dash-board
@@ -89,8 +89,8 @@ pStyle = {'fontSize': '18px',
 #Lists
 parties = [] # !!! Add list according to values from survey
 candidates = [] # !!! Add list according to values from survey
-questions = df.columns[10:] # !!! Add questions to this list
-kommuneList = df["Kommune"].unique()  # !!! change list according to values from survey
+questions = df_nameIndex.columns[11:25] # !!! Add questions to this list
+kommuneList = df_nameIndex["Storkreds"].unique()  # !!! change list according to values from survey
 logo_img = Image.open("dvf_logo.png")
 
 # Placeholder text
@@ -142,7 +142,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
         html.Div(
             children= [
                 dcc.Dropdown(id='kommuneValg',
-                             options= labelsKommuneList,
+                             options= kommuneList,
                              value=kommuneList[0],
                              style={"fontSize":"18px",
                                     "margin-bottom": '50px',
@@ -206,24 +206,27 @@ in that municipality
     Input("kommuneValg","value"))
 def lollipop_all(value):
     fig = go.Figure()
-    df_temp = df_nameIndex[df_nameIndex["Kommune"]==value]
+    df_temp = df_nameIndex[df_nameIndex["Storkreds"]==value]
     df_temp = df_temp.sort_values("Score")
 
 
 
+    j = 0
     for i, mean in enumerate(df_temp["Score"]):
-
-        candidate = df_temp.index[i]
-        fig.add_trace(go.Scatter(y=[i,i],x=[0,mean],
+        if i % 2 != 0:
+            continue 
+        candidate = df_temp.index[j]
+        fig.add_trace(go.Scatter(y=[j,j],x=[0,mean],
                                  marker_size = [0,12],
-                                 marker_color = df_temp["Kost_color"][i],
+                                 marker_color = df_temp["Kost_color"][j],
                                  line=go.scatter.Line(color=veggieGreen),
                                  hovertext=[df_temp.loc[candidate]["Parti"],df_temp.loc[candidate]["Parti"]],
                                  showlegend=False,
                                  hoverinfo=["none","x+y+text"],
-
+    
                                  )
                       )
+        j= j+1
 
     # Adding a hidden scatterplot to add a legend with the dietary choices of the candidates
     for k, v in kost_color.items():
@@ -267,7 +270,7 @@ are chosen.
     Output("Candidate_dropdown", 'options'),
     Input('kommuneValg', 'value'))
 def save_data(value):
-    return [{"label":x,"value":x} for x in df_nameIndex[df_nameIndex["Kommune"]==value].index]
+    return [{"label":x,"value":x} for x in df_nameIndex[df_nameIndex["Storkreds"]==value].index]
 
 
 """
@@ -380,8 +383,8 @@ IMPORTANT: Doesn't work correctly at the moment
     Output("piecharts","figure"),
     [Input("kommuneValg", "value"),Input("questions", "value")]
     )
-def update_piechart(kommune, question):
-    df_temp =  df_nameIndex[df_nameIndex["Kommune"]==kommune]
+def update_piechart(storkreds, question):
+    df_temp =  df_nameIndex[df_nameIndex["Storkreds"]==storkreds]
     df_temp = df_temp.sort_values(question)
 
 
@@ -389,22 +392,22 @@ def update_piechart(kommune, question):
 
     # labels for piechart - kommune
     value_labels = {0:"Uenig", 1:"Delvist Enig", 2:"Enig"}
-    answers_kommune = pd.Series([value_labels[x] for x in df_temp[question]],
+    answers_storkreds = pd.Series([value_labels[x] for x in df_temp[question]],
                                   index =df_temp.index)
-    labels_kommune = list(answers_kommune.unique())
+    labels_storkreds = list(answers_storkreds.unique())
 
     # Value for kommune
-    value_kommune = df_temp.groupby(question)["Score"].count()
+    value_storkreds = df_temp.groupby(question)["Score"].count()
 
     # Colors kommune
     color_dict = { "Enig":'rgb(15,122,55)',"Delvist Enig": 'rgb(169,220,163)',"Uenig":'rgb(218,241,212)'}
     colors_pie = {}
-    for answer in labels_kommune:
+    for answer in labels_storkreds:
         colors_pie[answer] = color_dict[answer]
 
 
-    fig_pie.add_trace(go.Pie(labels=labels_kommune,
-                                values=value_kommune,
+    fig_pie.add_trace(go.Pie(labels=labels_storkreds,
+                                values=value_storkreds,
                                 hole=0.6,
                                 marker_colors = list(colors_pie.values()),
                                 showlegend=False
@@ -425,7 +428,7 @@ def update_piechart(kommune, question):
 
 
     fig_pie.add_trace(go.Sunburst(
-        labels=[kommune],
+        labels=[storkreds],
         parents=[""],
         values=[1],
         ), row = 1, col=1)
@@ -455,8 +458,8 @@ possible answers, and the outer is the candidates that has given the answer resp
     Output("sunburst","figure"),
     [Input("kommuneValg", "value"),Input("questions", "value")]
     )
-def update_sunburst(kommune,question):
-    df_temp =  df_nameIndex[df_nameIndex["Kommune"]==kommune]
+def update_sunburst(storkreds,question):
+    df_temp =  df_nameIndex[df_nameIndex["Storkreds"]==storkreds]
     df_temp = df_temp.sort_values(question)
 
     # Parents for sunburst
