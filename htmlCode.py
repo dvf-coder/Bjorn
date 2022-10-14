@@ -89,7 +89,7 @@ pStyle = {'fontSize': '18px',
 #Lists
 parties = [] # !!! Add list according to values from survey
 candidates = [] # !!! Add list according to values from survey
-questions = df_nameIndex.columns[11:25] # !!! Add questions to this list
+questions = df_nameIndex.columns[3:20] # !!! Add questions to this list
 kommuneList = df_nameIndex["Storkreds"].unique()  # !!! change list according to values from survey
 logo_img = Image.open("dvf_logo.png")
 
