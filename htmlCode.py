@@ -78,7 +78,7 @@ H2Style = {"fontSize": "25px",
             "margin-bottom":'10px',
             "padding":"1.5%"}
 
-pStyle = {'fontSize': '18px',
+pStyle = {'fontSize': '20px',
             'color': textBlack,
             'text-align': 'center',
             'background': 'white',
@@ -169,7 +169,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                     dcc.RadioItems(questions,
                                   value = questions[0],
                                   labelStyle={'display': 'block'},
-                                  style = {'fontSize': '15px',
+                                  style = {'fontSize': '20px',
                                             'color': textBlack,
                                             'text-align': 'left',
                                             'background': 'white',
@@ -177,10 +177,11 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                                             'margin-left': '7%',
                                             'margin-right': '7%',
                                             'margin-top': '1%'
-                                            # 'padding':'1.5%'
+                                            #'padding':'1.5%'
                                             },
+                                  inputStyle = {'margin-top': '20px'},
                                   id = 'questions')
-                    ]),
+                    ], style ={}),
                 ]),
         html.H2(style = H2Style,
                 id="question_sunburt"),
