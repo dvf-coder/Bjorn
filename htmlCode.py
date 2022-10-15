@@ -256,7 +256,7 @@ def lollipop_all(value):
                                  textposition="top right",
                                  showlegend=False
                                 ))
-    fig.update_traces(textfont_size=14)
+    fig.update_traces(textfont_size=16)
         
     
     # Adding a hidden scatterplot to add a legend with the dietary choices of the candidates
