@@ -146,7 +146,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                 dcc.Dropdown(id='kommuneValg',
                              options= kommuneList,
                              value=kommuneList[0],
-                             style={"fontSize":"18px",
+                             style={"fontSize":"30px",
                                     "margin-bottom": '50px',
                                     "margin-left": "10%",
                                     "margin-right": "20%"
