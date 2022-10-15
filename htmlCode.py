@@ -188,8 +188,8 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                 id="question_sunburt"),
         html.Div([
             dcc.Graph(id="sunburst"),
-            html.H2('Sammenlign din storkreds, med resten af Danmark',
-                    classname = 'Header-description',
+            html.H2('Sammenlign din storkreds med resten af Danmark',
+                    className = 'Header-description',
                     style = H2Style
                 ),
             dcc.Graph(id="piecharts"),
