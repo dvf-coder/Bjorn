@@ -248,6 +248,16 @@ def lollipop_all(value):
                                  )
                       )
     
+    for i, score in enumerate(df_temp["Score"]):
+        fig.add_trace(go.Scatter(x=[0],y=[i],
+                                 marker_size = [0],
+                                 mode="lines+markers+text",
+                                 text = [f"Score: {str(score)}"],
+                                 textposition="top right",
+                                 showlegend=False
+                                ))
+    fig.update_traces(textfont_size=14)
+        
     
     # Adding a hidden scatterplot to add a legend with the dietary choices of the candidates
     for k, v in kost_color.items():
