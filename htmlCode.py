@@ -169,7 +169,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                     dcc.RadioItems(questions,
                                   value = questions[0],
                                   labelStyle={'display': 'block'},
-                                  style = {'fontSize': '20px',
+                                  style = {'fontSize': '40px',
                                             'color': textBlack,
                                             'text-align': 'left',
                                             'background': 'white',
