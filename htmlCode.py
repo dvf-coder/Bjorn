@@ -187,8 +187,19 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
             dcc.Graph(id="sunburst"),
             dcc.Graph(id="piecharts"),
             html.Br(),
-            html.P('Herunder kan du vælge din storkreds, så du kun får resultater fra kandidater, du kan stemme på i dit område.',
+            html.P('Grønt folketingsvals 2022 er en undersøgelse foretaget af Dansk Vegetarisk Forening. Hvis en kandidat ikke er med i undersøgelsen, er det fordi, kandidaten ikke har besvaret undersøgelsen. Du kan læse mere her: wwww.vegetarisk.dk.',
                style = pStyle),
+            html.P("Husk at stem tirsdag den 01. November",
+                   style = H2Style),
+            html.P("GODT VALG!",
+                   style = {"fontSize": "50px",
+                               "color": veganGreen,
+                               "text-align": "center",
+                               'background': 'white',
+                               'font-family': 'Calibri',
+                               "margin-top": "5px",
+                               "margin-bottom":'10px',
+                               "padding":"1.5%"})
             ]),
         ],style={'background-color':'white','margin':'2%','display':'inline-block'})
     return component
