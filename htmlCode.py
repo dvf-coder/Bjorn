@@ -107,6 +107,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
     omstillingen af landbruget og hvordan de vil finansiere den grønne omstilling. 
     Du kan klikke dig ind på specifikke spørgsmål eller kandidater og undersøge deres svar, imens du selv tager stilling. 
     God fornøjelse!'''
+    bottomtext = """"biler er godt for mavsen"""
     component = html.Div([
         html.Div(
             children=[
@@ -184,9 +185,10 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                 id="question_sunburt"),
         html.Div([
             dcc.Graph(id="sunburst"),
-            dcc.Graph(id="piecharts")
-            ])
-
+            dcc.Graph(id="piecharts"),
+            html.P('Herunder kan du vælge din storkreds, så du kun får resultater fra kandidater, du kan stemme på i dit område.',
+               style = pStyle),
+            ]),
         ],style={'background-color':'white','margin':'2%','display':'inline-block'})
     return component
 
