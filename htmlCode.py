@@ -20,6 +20,7 @@ import numpy as np
 
 veganGreen = 'rgb(16,114,60)' # Light-green for the vegan color option !!! Change for real color
 veggieGreen = 'rgb(140,190,84)' # Dark-green for the vegetarian color option !!! Change for real color
+veggieGreenLight = "rgb(180, 240, 120)"
 
 
 # Load Veggie Data
@@ -205,12 +206,21 @@ in that municipality
     Output("candidate_all", "figure"),
     Input("kommuneValg","value"))
 def lollipop_all(value):
+    
+    kost_color = {"Spiser ofte kød, kødpålæg, fjerkræ og/eller fisk (hver dag eller næsten hver dag)": "red", 
+             "Spiser fisk, men derudover kun vegetarisk, aldrig kød, kødpålæg og fjerkræ":"turquoise",
+             "Spiser vegetarisk mindst halvdelen af ugens dage, de øvrige dage kød, fjerkræ og/eller fisk":"blue", 
+             'Spiser kun vegetarisk, sjældent mælkeprodukter og æg': veggieGreenLight,
+             'Spiser kun vegetarisk, aldrig kød, kødpålæg, fjerkræ og fisk': veggieGreen,
+             'Spiser kun vegansk':veganGreen, 
+             'Ønsker ikke at svare': "grey",
+             }
+    
     fig = go.Figure()
     df_temp = df_nameIndex[df_nameIndex["Storkreds"]==value]
     df_temp = df_temp.sort_values("Score")
-
-
-
+    
+    
     for j, mean in enumerate(df_temp["Score"]):
         candidate = df_temp.index[j]
         fig.add_trace(go.Scatter(y=[j,j],x=[0,mean],
@@ -223,8 +233,8 @@ def lollipop_all(value):
     
                                  )
                       )
-
-
+    
+    
     # Adding a hidden scatterplot to add a legend with the dietary choices of the candidates
     for k, v in kost_color.items():
         fig.add_trace(go.Scatter(x=[0],y=[0],
@@ -232,19 +242,7 @@ def lollipop_all(value):
                                  marker_color = v,
                                  name=k
                                 ))
-    fig.update_layout(legend= {'itemsizing': 'constant',
-                               # "itemsymbol":"circle"
-                               })
-
-#    fig.add_hline(y=df_temp["Score"].mean(),
-#            line_width=0.5,
-#            line_dash="dash",
-#            line_color=veggieGreen,
-#            annotation_text="Kommune gennemsnit",
-#            annotation_position="bottom right")
-
-
-
+    
     tickvals_ = list(range(len(df_temp)))
     ticktext_ = list(df_temp.index)
     fig.update_layout(
@@ -253,7 +251,22 @@ def lollipop_all(value):
             tickvals = tickvals_,
             ticktext = ticktext_),
         title = {"text":f"Kandidater for {value}"}
-        )
+        )    
+    
+    
+    
+    fig.update_layout(legend= {'itemsizing': 'constant',
+                               "orientation" : "h",
+                               "yanchor" : "bottom",
+                               "y":-0.135,
+                               "xanchor" : "right",
+                               "x" : 0.75
+                               })
+    
+    
+    fig.update_layout(
+        height=1500)
+        
     return fig
 
 """
