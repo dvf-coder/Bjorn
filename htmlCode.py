@@ -186,6 +186,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
         html.Div([
             dcc.Graph(id="sunburst"),
             dcc.Graph(id="piecharts"),
+            html.Br(),
             html.P('Herunder kan du vælge din storkreds, så du kun får resultater fra kandidater, du kan stemme på i dit område.',
                style = pStyle),
             ]),
