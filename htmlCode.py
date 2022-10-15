@@ -261,6 +261,7 @@ def lollipop_all(value):
     ticktext_ = list(df_temp.index)
     fig.update_layout(
         yaxis = dict(
+            tickfont = dict(size = 16),
             tickmode = "array",
             tickvals = tickvals_,
             ticktext = ticktext_),
