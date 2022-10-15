@@ -108,7 +108,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
     omstillingen af landbruget og hvordan de vil finansiere den grønne omstilling. 
     Du kan klikke dig ind på specifikke spørgsmål eller kandidater og undersøge deres svar, imens du selv tager stilling. 
     God fornøjelse!'''
-    bottomtext = """"biler er godt for mavsen"""
+
     component = html.Div([
         html.Div(
             children=[
