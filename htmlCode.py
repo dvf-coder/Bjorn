@@ -151,6 +151,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                                     "margin-left": "10%",
                                     "margin-right": "20%"
                                     },
+                             searchable = False
                              ),
                 dcc.Graph(id="candidate_all",
                           config = dict(staticPlot = True)),
@@ -232,8 +233,7 @@ def lollipop_all(value):
     
     fig = go.Figure()
     df_temp = df_nameIndex[df_nameIndex["Storkreds"]==value]
-    df_temp = df_temp.sort_values("Score")
-    
+    df_temp = df_temp.sort_values(["Score", "Navn"], ascending = [True, False])    
     
     for j, mean in enumerate(df_temp["Score"]):
         candidate = df_temp.index[j]
