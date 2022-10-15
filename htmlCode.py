@@ -188,9 +188,13 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                 id="question_sunburt"),
         html.Div([
             dcc.Graph(id="sunburst"),
+            html.H2('Sammenlign din storkreds, med resten af Danmark',
+                    classname = 'Header-description',
+                    style = H2Style
+                ),
             dcc.Graph(id="piecharts"),
             html.Br(),
-            html.P('Grønt folketingsvals 2022 er en undersøgelse foretaget af Dansk Vegetarisk Forening. Hvis en kandidat ikke er med i undersøgelsen, er det fordi, kandidaten ikke har besvaret undersøgelsen. Du kan læse mere her: wwww.vegetarisk.dk.',
+            html.P('Grønt folketingsvalg 2022 er en undersøgelse foretaget af Dansk Vegetarisk Forening. Hvis en kandidat ikke er med i undersøgelsen, er det fordi, kandidaten ikke har besvaret undersøgelsen. Du kan læse mere her: wwww.vegetarisk.dk.',
                style = pStyle),
             html.P("Husk at stem tirsdag den 01. November",
                    style = H2Style),
