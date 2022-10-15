@@ -108,6 +108,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
     omstillingen af landbruget og hvordan de vil finansiere den grønne omstilling. 
     Du kan klikke dig ind på specifikke spørgsmål eller kandidater og undersøge deres svar, imens du selv tager stilling. 
     God fornøjelse!'''
+    bottomtext = """"biler er godt for mavsen"""
     component = html.Div([
         html.Div(
             children=[
@@ -185,9 +186,22 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                 id="question_sunburt"),
         html.Div([
             dcc.Graph(id="sunburst"),
-            dcc.Graph(id="piecharts")
-            ])
-
+            dcc.Graph(id="piecharts"),
+            html.Br(),
+            html.P('Grønt folketingsvals 2022 er en undersøgelse foretaget af Dansk Vegetarisk Forening. Hvis en kandidat ikke er med i undersøgelsen, er det fordi, kandidaten ikke har besvaret undersøgelsen. Du kan læse mere her: wwww.vegetarisk.dk.',
+               style = pStyle),
+            html.P("Husk at stem tirsdag den 01. November",
+                   style = H2Style),
+            html.P("GODT VALG!",
+                   style = {"fontSize": "50px",
+                               "color": veganGreen,
+                               "text-align": "center",
+                               'background': 'white',
+                               'font-family': 'Calibri',
+                               "margin-top": "5px",
+                               "margin-bottom":'10px',
+                               "padding":"1.5%"})
+            ]),
         ],style={'background-color':'white','margin':'2%','display':'inline-block'})
     return component
 
