@@ -69,7 +69,7 @@ kost_color = {"Kødspiser":"red", "Fleksitar":"turquoise","Pescetar":"blue", "Ve
 #Style
 textBlack = 'rgb(0,0,0)' #Black for text
 
-H2Style = {"fontSize": "25px",
+H2Style = {"fontSize": "50px",
             "color": veganGreen,
             "text-align": "center",
             'background': 'white',
@@ -78,7 +78,7 @@ H2Style = {"fontSize": "25px",
             "margin-bottom":'10px',
             "padding":"1.5%"}
 
-pStyle = {'fontSize': '20px',
+pStyle = {'fontSize': '40px',
             'color': textBlack,
             'text-align': 'center',
             'background': 'white',
