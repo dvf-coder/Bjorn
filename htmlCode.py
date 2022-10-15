@@ -180,7 +180,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                                             'margin-top': '1%'
                                             #'padding':'1.5%'
                                             },
-                                  inputStyle = {'margin-top': '20px'},
+                                  inputStyle = {'margin-top': '40px'},
                                   id = 'questions')
                     ], style ={}),
                 ]),
