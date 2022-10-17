@@ -247,8 +247,8 @@ def lollipop_all(value):
 
     
     kost_color = {'Spiser kun vegansk':veganGreen,
-                  'Spiser kun vegetarisk, aldrig kød, kødpålæg, fjerkræ og fisk': veggieGreen,
-                  'Spiser kun vegetarisk, sjældent mælkeprodukter og æg': veggieGreenLight,
+                  'Spiser kun vegetarisk, sjældent mælkeprodukter og æg': veggieGreen,
+                  'Spiser kun vegetarisk, aldrig kød, kødpålæg, fjerkræ og fisk': veggieGreenLight,
                   "Spiser fisk, men derudover kun vegetarisk, aldrig kød, kødpålæg og fjerkræ":"turquoise",
                   "Spiser vegetarisk mindst halvdelen af ugens dage, de øvrige dage kød, fjerkræ og/eller fisk":"blue",
                   "Spiser ofte kød, kødpålæg, fjerkræ og/eller fisk (hver dag eller næsten hver dag)": "red",
