@@ -90,7 +90,17 @@ pStyle = {'fontSize': '40px',
 #Lists
 parties = [] # !!! Add list according to values from survey
 candidates = [] # !!! Add list according to values from survey
+
 questions = df_nameIndex.columns[4:26] # !!! Add questions to this list
+questionLabels = ["  " + question for question in questions]
+questionItems = []
+
+for i in range(len(questions)):
+    value = questions[i]
+    label = questionLabels[i]
+    item = {"label":  label,"value": value}
+    questionItems.append(item)
+
 kommuneList = df_nameIndex["Storkreds"].unique()  # !!! change list according to values from survey
 kommuneList.sort()
 logo_img = Image.open("dvf_logo.png")
@@ -103,8 +113,8 @@ logo_img = Image.open("dvf_logo.png")
 
 
 def CodeHTML(textBlack, veganGreen, labelsKommuneList):
-    headline = 'Vegetarisk folketingsvalg 2022'
-    subheadline = '''Den grønne valgundersøgelse 2022 er Dansk Vegetarisk Forenings valgundersøgelse forud for folketingsvalget.
+    headline = 'Grønt Valg 2022'
+    subheadline = '''Grønt Valg 2022 er Dansk Vegetarisk Forenings valgundersøgelse forud for folketingsvalget.
     Her kan du finde ud af, hvad dine kandidater fra din storkreds vil gøre for at fremme grønne måltider, fødevarer,
     omstillingen af landbruget og hvordan de vil finansiere den grønne omstilling. 
     Du kan klikke dig ind på specifikke spørgsmål eller kandidater og undersøge deres svar, imens du selv tager stilling. 
@@ -171,7 +181,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                 html.P('Herunder kan du vælge specifikke spørgsmål og se, hvad kandidaterne har svaret på disse.',
                        style=pStyle),
                 html.Div([
-                    dcc.RadioItems(questions,
+                    dcc.RadioItems(questionItems,
                                   value = questions[0],
                                   labelStyle={'display': 'block'},
                                   style = {'fontSize': '40px',
@@ -200,7 +210,9 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
             html.Br(),
             html.P('Grønt Valg 2022 er en undersøgelse foretaget af Dansk Vegetarisk Forening. Hvis en kandidat ikke er med i undersøgelsen, er det fordi, kandidaten ikke har besvaret undersøgelsen. Du kan læse mere her:',
                style = pStyle),
-            html.A(id = "vegetarisk.dk",href= "https://vegetarisk.dk/", children = "www.vegetarisk.dk", target = "_blank", style = pStyle),
+            html.A(id = "vegetarisk.dk",href= "https://vegetarisk.dk/", children = "www.vegetarisk.dk", target = "_blank", style = {"marginLeft":"35%",
+                                                                                                                                    "fontSize": "50px",
+                                                                                                                                    "color": veganGreen}),
             html.P("Husk at stemme tirsdag den 1. november",
                    style = H2Style),
             html.P("GODT VALG!",
@@ -232,15 +244,17 @@ in that municipality
     Input("kommuneValg","value"))
 def lollipop_all(value):
     
-    kost_color = {"Spiser ofte kød, kødpålæg, fjerkræ og/eller fisk (hver dag eller næsten hver dag)": "red", 
-             "Spiser fisk, men derudover kun vegetarisk, aldrig kød, kødpålæg og fjerkræ":"turquoise",
-             "Spiser vegetarisk mindst halvdelen af ugens dage, de øvrige dage kød, fjerkræ og/eller fisk":"blue", 
-             'Spiser kun vegetarisk, sjældent mælkeprodukter og æg': veggieGreenLight,
-             'Spiser kun vegetarisk, aldrig kød, kødpålæg, fjerkræ og fisk': veggieGreen,
-             'Spiser kun vegansk':veganGreen, 
-             'Ønsker ikke at svare': "grey",
-             'Ved ikke / har ikke taget stilling':"grey"
-             }
+
+    
+    kost_color = {'Spiser kun vegansk':veganGreen,
+                  'Spiser kun vegetarisk, aldrig kød, kødpålæg, fjerkræ og fisk': veggieGreen,
+                  'Spiser kun vegetarisk, sjældent mælkeprodukter og æg': veggieGreenLight,
+                  "Spiser fisk, men derudover kun vegetarisk, aldrig kød, kødpålæg og fjerkræ":"turquoise",
+                  "Spiser vegetarisk mindst halvdelen af ugens dage, de øvrige dage kød, fjerkræ og/eller fisk":"blue",
+                  "Spiser ofte kød, kødpålæg, fjerkræ og/eller fisk (hver dag eller næsten hver dag)": "red",
+                  'Ønsker ikke at svare': "grey",
+                  'Ved ikke / har ikke taget stilling':"grey"
+                  }
     
     fig = go.Figure()
     df_temp = df_nameIndex[df_nameIndex["Storkreds"]==value]
