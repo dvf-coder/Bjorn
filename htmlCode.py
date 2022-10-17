@@ -544,7 +544,7 @@ def update_sunburst(storkreds,question):
     value_labels = {'Uenig - det vil jeg ikke støtte':"Uenig", 
                     'Enig - det vil jeg støtte, men jeg vil ikke selv sætte det på dagsordenen':"Delvist Enig", 
                     "Enig - det vil jeg arbejde aktivt for":"Enig",
-                   'Ved ikke / har ikke taget stilling': "Ved ikke"}
+                   'Ved ikke / har ikke taget stilling': "Ved ikke / Ikke taget stilling"}
     parents_candidates = pd.Series([value_labels[x] for x in df_temp[question]],
                                   index =df_temp.index)
 
@@ -579,7 +579,7 @@ def update_sunburst(storkreds,question):
     color_dict = { "Enig":'rgb(15,122,55)',
                   "Delvist Enig": 'rgb(169,220,163)',
                   "Uenig":'rgb(218,241,212)',
-                  "Ved ikke": "white"}
+                  "Ved ikke / Ikke taget stilling": "white"}
     colors_sunburst = {}
     for answer in parents_candidates.unique():
         colors_sunburst[answer] = color_dict[answer]
