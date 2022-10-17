@@ -172,7 +172,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                 #dcc.Graph(id="candidate_profile")
                 ]),
         html.Br(),
-        html.P("Hvert svar kan give 2, 1 eller 0 point og den samlede antal point udgør kandidatens veggiescore. At ville arbejde aktivt for en grøn mærkesag giver 2 point. At ville støtte en grøn mærkesag uden at arbejde aktivt for den giver 1 point. Ikke at ville støtte sagen, at svare ‘ved ikke’ eller slet ikke at svare giver 0 point.", 
+        html.P("Hvert svar kan give 2, 1 eller 0 point og det samlede antal point udgør kandidatens veggiescore. At ville arbejde aktivt for en grøn mærkesag giver 2 point. At ville støtte en grøn mærkesag uden at arbejde aktivt for den giver 1 point. Ikke at ville støtte sagen, at svare ‘ved ikke’ eller slet ikke at svare giver 0 point.", 
                style = pStyle),
         html.Div(
             children =[
