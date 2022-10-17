@@ -37,8 +37,8 @@ df_nameIndex = df_nameIndex.set_index("Navn")
 # Tilføjer en randomiseret kostkolonne
 #df_nameIndex["Kost"] = list(np.random.randint(low=1, high=6,size=len(df_nameIndex)))
 #kost_dict = {5: "Kødspiser", 4:"Fleksitar",3:"Pescetar", 2: "Vegetar",1:"Veganer", 6: "Ønsker ikke at svare"}
-kost_color = {"Kødspiser":"red", "Fleksitar":"turquoise","Pescetar":"blue", "Vegetar":veggieGreen,"Veganer":veganGreen
-              ,"Ønsker ikke at svare" : "grey"}
+#kost_color = {"Kødspiser":"red", "Fleksitar":"turquoise","Pescetar":"blue", "Vegetar":veggieGreen,"Veganer":veganGreen
+#              ,"Ønsker ikke at svare" : "grey"}
 #df_nameIndex["Kost"] = [kost_dict[x] for x in df_nameIndex["Kost"]]
 #df_nameIndex["Kost_color"] = [kost_color[x] for x in df_nameIndex["Kost"]]
 
@@ -90,7 +90,7 @@ pStyle = {'fontSize': '40px',
 #Lists
 parties = [] # !!! Add list according to values from survey
 candidates = [] # !!! Add list according to values from survey
-questions = df_nameIndex.columns[3:19] # !!! Add questions to this list
+questions = df_nameIndex.columns[4:26] # !!! Add questions to this list
 kommuneList = df_nameIndex["Storkreds"].unique()  # !!! change list according to values from survey
 logo_img = Image.open("dvf_logo.png")
 
@@ -234,6 +234,7 @@ def lollipop_all(value):
              'Spiser kun vegetarisk, aldrig kød, kødpålæg, fjerkræ og fisk': veggieGreen,
              'Spiser kun vegansk':veganGreen, 
              'Ønsker ikke at svare': "grey",
+             'Ved ikke / har ikke taget stilling':"grey"
              }
     
     fig = go.Figure()
@@ -426,65 +427,80 @@ IMPORTANT: Doesn't work correctly at the moment
 def update_piechart(storkreds, question):
     df_temp =  df_nameIndex[df_nameIndex["Storkreds"]==storkreds]
     df_temp = df_temp.sort_values(question)
-
-
+    
+    
     fig_pie = make_subplots(rows=1, cols=2, specs=[[{'type':'domain'}, {'type':'domain'}]])
-
+    
     # labels for piechart - kommune
-    value_labels = {0:"Uenig", 1:"Delvist Enig", 2:"Enig"}
+    value_labels = {'Uenig - det vil jeg ikke støtte':"Uenig", 
+                    'Enig - det vil jeg støtte, men jeg vil ikke selv sætte det på dagsordenen':"Delvist Enig", 
+                    "Enig - det vil jeg arbejde aktivt for":"Enig",
+                   'Ved ikke / har ikke taget stilling': "Ved ikke / Ikke taget stilling"}
+    
     answers_storkreds = pd.Series([value_labels[x] for x in df_temp[question]],
                                   index =df_temp.index)
-    labels_storkreds = list(answers_storkreds.unique())
-
+    
+    
     # Value for kommune
-    value_storkreds = df_temp.groupby(question)["Score"].count()
-
+    value_storkreds = df_temp.groupby(question).size()
+    
+    labels_storkreds = [value_labels[x] for x in value_storkreds.index]
+    
     # Colors kommune
-    color_dict = { "Enig":'rgb(15,122,55)',"Delvist Enig": 'rgb(169,220,163)',"Uenig":'rgb(218,241,212)'}
-    colors_pie = {}
-    for answer in labels_storkreds:
-        colors_pie[answer] = color_dict[answer]
-
-
+    color_dict = { "Enig":'rgb(15,122,55)',
+                  "Delvist Enig": 'rgb(169,220,163)',
+                  "Uenig":'rgb(218,241,212)',
+                  "Ved ikke / Ikke taget stilling": "grey"}
+    
+    colors = [color_dict[label] for label in labels_storkreds]
+    
+    
+    
     fig_pie.add_trace(go.Pie(labels=labels_storkreds,
                                 values=value_storkreds,
                                 hole=0.6,
-                                marker_colors = list(colors_pie.values()),
-                                showlegend=False
+                                marker_colors = colors,
+                                showlegend=False,
+                             text=labels_storkreds
                                 ),row = 1,col = 1)
-
-
-    values = df_nameIndex.groupby(question)["Score"].count()
-
-    labels = ["Uenig", "Delvist Enig", "Enig"]
-    colors = ['rgb(218,241,212)','rgb(169,220,163)','rgb(15,122,55)']
-
-
+    
+    answers_all = pd.Series([value_labels[x] for x in df_nameIndex[question]],
+                                  index =df_nameIndex.index)
+    
+    values = df_nameIndex.groupby(question).size()
+    labels = [value_labels[x] for x in values.index]
+    
+    colors = [color_dict[label] for label in labels]
+    
+    
     fig_pie.add_trace(go.Pie(labels=labels,
                                 values=values,
                                 hole=0.6,
-                                marker_colors = colors
+                                marker_colors = colors,
+                             showlegend=False,
+                             text = labels
                                 ),row = 1,col = 2)
-
-
+    
+    
     fig_pie.add_trace(go.Sunburst(
         labels=[storkreds],
         parents=[""],
         values=[1],
         ), row = 1, col=1)
-
-
+    
+    
     fig_pie.add_trace(go.Sunburst(
         labels=["Alle Kandidater"],
         parents=[""],
         values=[1],
         ), row = 1, col=2)
-
+    
+    
+    
     fig_pie.update_layout(
         autosize=False,
         width=1200,
         height=720)
-
     return fig_pie
 
 
@@ -503,7 +519,10 @@ def update_sunburst(storkreds,question):
     df_temp = df_temp.sort_values(question)
 
     # Parents for sunburst
-    value_labels = {0:"Uenig", 1:"Delvist Enig", 2:"Enig"}
+    value_labels = {'Uenig - det vil jeg ikke støtte':"Uenig", 
+                    'Enig - det vil jeg støtte, men jeg vil ikke selv sætte det på dagsordenen':"Delvist Enig", 
+                    "Enig - det vil jeg arbejde aktivt for":"Enig",
+                   'Ved ikke / har ikke taget stilling': "Ved ikke"}
     parents_candidates = pd.Series([value_labels[x] for x in df_temp[question]],
                                   index =df_temp.index)
 
@@ -535,7 +554,10 @@ def update_sunburst(storkreds,question):
 
     fig = go.Figure()
 
-    color_dict = { "Enig":'rgb(15,122,55)',"Delvist Enig": 'rgb(169,220,163)',"Uenig":'rgb(218,241,212)'}
+    color_dict = { "Enig":'rgb(15,122,55)',
+                  "Delvist Enig": 'rgb(169,220,163)',
+                  "Uenig":'rgb(218,241,212)',
+                  "Ved ikke": "white"}
     colors_sunburst = {}
     for answer in parents_candidates.unique():
         colors_sunburst[answer] = color_dict[answer]
