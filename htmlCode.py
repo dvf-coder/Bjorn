@@ -172,7 +172,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                 #dcc.Graph(id="candidate_profile")
                 ]),
         html.Br(),
-        html.P("Hvert svar kan give 2, 1 eller 0 point og den samlede score udgør kandidatens veggiescore. At ville arbejde aktivt for en grøn mærkesag giver 2 point. At ville støtte en grøn mærkesag uden at arbejde aktivt for den giver 1 point. Ikke at ville støtte sagen, at svare ‘ved ikke’ eller slet ikke at svare giver 0 point.", 
+        html.P("Hvert svar kan give 2, 1 eller 0 point og den samlede antal point udgør kandidatens veggiescore. At ville arbejde aktivt for en grøn mærkesag giver 2 point. At ville støtte en grøn mærkesag uden at arbejde aktivt for den giver 1 point. Ikke at ville støtte sagen, at svare ‘ved ikke’ eller slet ikke at svare giver 0 point.", 
                style = pStyle),
         html.Div(
             children =[
@@ -213,7 +213,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
             html.Br(),
             html.P('Grønt Valg 2022 er en undersøgelse foretaget af Dansk Vegetarisk Forening. Hvis en kandidat ikke er med i undersøgelsen, er det fordi, kandidaten ikke har besvaret undersøgelsen. Du kan læse mere her:',
                style = pStyle),
-            html.A(id = "vegetarisk.dk",href= "https://vegetarisk.dk/", children = "www.vegetarisk.dk", target = "_blank", style = {"marginLeft":"35%",
+            html.A(id = "vegetarisk.dk",href= "https://vegetarisk.dk/valg2022/", children = "Grønt Valg 2022", target = "_blank", style = {"marginLeft":"35%",
                                                                                                                                     "fontSize": "50px",
                                                                                                                                     "color": veganGreen}),
             html.P("Husk at stemme tirsdag den 1. november",
