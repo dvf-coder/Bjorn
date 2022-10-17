@@ -92,6 +92,7 @@ parties = [] # !!! Add list according to values from survey
 candidates = [] # !!! Add list according to values from survey
 questions = df_nameIndex.columns[4:26] # !!! Add questions to this list
 kommuneList = df_nameIndex["Storkreds"].unique()  # !!! change list according to values from survey
+kommuneList.sort()
 logo_img = Image.open("dvf_logo.png")
 
 # Placeholder text
@@ -116,6 +117,9 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                     src = logo_img,
                     height = "90px"
                     ),
+                html.P("Hvis du har åbnet siden fra mobilen, skal du formentlig zoome ud for at få det hele med.", 
+                       style= {"margin-right": "95%",
+                           "fontSize":"10px"}),
                 html.H1(
                     children= headline,
                     className='header-title',
@@ -145,7 +149,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
             children= [
                 dcc.Dropdown(id='kommuneValg',
                              options= kommuneList,
-                             value=kommuneList[0],
+                             value=kommuneList[3],
                              style={"fontSize":"30px",
                                     "margin-bottom": '50px',
                                     "margin-left": "10%",
@@ -194,9 +198,10 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                 ),
             dcc.Graph(id="piecharts"),
             html.Br(),
-            html.P('Grønt folketingsvalg 2022 er en undersøgelse foretaget af Dansk Vegetarisk Forening. Hvis en kandidat ikke er med i undersøgelsen, er det fordi, kandidaten ikke har besvaret undersøgelsen. Du kan læse mere her: wwww.vegetarisk.dk.',
+            html.P('Grønt Valg 2022 er en undersøgelse foretaget af Dansk Vegetarisk Forening. Hvis en kandidat ikke er med i undersøgelsen, er det fordi, kandidaten ikke har besvaret undersøgelsen. Du kan læse mere her:',
                style = pStyle),
-            html.P("Husk at stem tirsdag den 01. November",
+            html.A(id = "vegetarisk.dk",href= "https://vegetarisk.dk/", children = "www.vegetarisk.dk", target = "_blank", style = pStyle),
+            html.P("Husk at stemme tirsdag den 1. november",
                    style = H2Style),
             html.P("GODT VALG!",
                    style = {"fontSize": "50px",
@@ -281,8 +286,11 @@ def lollipop_all(value):
             tickmode = "array",
             tickvals = tickvals_,
             ticktext = ticktext_),
-        title = {"text":f"Kandidater for {value}"}
-        )    
+        title = {"text":f"Veggiescoren for kandidater i {value}",
+                 "font": {"size": 30},
+                 "xanchor": "left",
+                 "x":0
+                 })    
     
     
     
