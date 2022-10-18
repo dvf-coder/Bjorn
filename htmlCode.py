@@ -608,7 +608,8 @@ def update_sunburst(storkreds,question):
 
 server = app.server
 # for google analytics
-app.index_string = """<!DOCTYPE html>
+app.index_string = """
+<!DOCTYPE html>
 <html>
     <head>
         <!-- Google tag (gtag.js) -->
@@ -624,20 +625,16 @@ app.index_string = """<!DOCTYPE html>
         <title>{%title%}</title>
         {%favicon%}
         {%css%}
-        <meta property="og:type" content="article">
-        <meta property="og:title" content="Cryptocurrency Indicators Dashboard"">
-        <meta property="og:site_name" content="https://grontvalg22.herokuapp.com/">
-        <meta property="og:url" content="https://grontvalg22.herokuapp.com/">
-        <meta property="og:image" content="https://raw.githubusercontent.com/dc-aichara/DS-ML-Public/master/Medium_Files/dashboard_demo/assets/favicon.ico">
-        <meta property="article:published_time" content="2022-10-18">
     </head>
     <body>
+        <div>My Custom header</div>
         {%app_entry%}
         <footer>
             {%config%}
             {%scripts%}
             {%renderer%}
         </footer>
+        <div>My Custom footer</div>
     </body>
 </html>"""
 if __name__ == '__main__':
