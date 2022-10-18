@@ -112,7 +112,7 @@ logo_img = Image.open("dvf_logo.png")
 # function with html code
 
 
-def CodeHTML(textBlack, veganGreen, labelsKommuneList):
+def CodeHTML(textBlack, veganGreen, labelsKommuneList):  
     headline = 'Grønt Valg 2022'
     subheadline = '''Grønt Valg 2022 er Dansk Vegetarisk Forenings valgundersøgelse forud for folketingsvalget.
     Her kan du finde ud af, hvad dine kandidater fra din storkreds vil gøre for at fremme grønne måltider, fødevarer,
@@ -607,5 +607,38 @@ def update_sunburst(storkreds,question):
     return fig
 
 server = app.server
+# for google analytics
+app.index_string = """<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-9CDEQDK05M"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+        
+          gtag('config', 'G-9CDEQDK05M');
+        </script>
+        {%metas%}
+        <title>{%title%}</title>
+        {%favicon%}
+        {%css%}
+        <meta property="og:type" content="article">
+        <meta property="og:title" content="Cryptocurrency Indicators Dashboard"">
+        <meta property="og:site_name" content="https://grontvalg22.herokuapp.com/">
+        <meta property="og:url" content="https://grontvalg22.herokuapp.com/">
+        <meta property="og:image" content="https://raw.githubusercontent.com/dc-aichara/DS-ML-Public/master/Medium_Files/dashboard_demo/assets/favicon.ico">
+        <meta property="article:published_time" content="2022-10-18">
+    </head>
+    <body>
+        {%app_entry%}
+        <footer>
+            {%config%}
+            {%scripts%}
+            {%renderer%}
+        </footer>
+    </body>
+</html>"""
 if __name__ == '__main__':
     app.run_server()
