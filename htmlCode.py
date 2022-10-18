@@ -127,9 +127,9 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
                     src = logo_img,
                     height = "90px"
                     ),
-                html.P("Hvis du har åbnet siden fra mobilen, skal du formentlig zoome ud for at få det hele med.", 
-                       style= {"margin-right": "95%",
-                           "fontSize":"10px"}),
+                html.P("OBS: Hvis du har åbnet siden fra mobilen, skal du formentlig zoome ud for at få det hele med.", 
+                       style= {"margin-right": "90%",
+                           "fontSize":"15px"}),
                 html.H1(
                     children= headline,
                     className='header-title',
