@@ -232,6 +232,36 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
     return component
 
 app = dash.Dash()
+
+# google analytics
+app.index_string = """
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-9CDEQDK05M"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+        
+          gtag('config', 'G-9CDEQDK05M');
+        </script>
+        {%metas%}
+        <title>{%title%}</title>
+        {%favicon%}
+        {%css%}
+    </head>
+    <body>
+        {%app_entry%}
+        <footer>
+            {%config%}
+            {%scripts%}
+            {%renderer%}
+        </footer>        
+    </body>
+</html>"""
+
 app.layout = CodeHTML(textBlack, veganGreen, kommuneList)
 
 # dash code
@@ -608,34 +638,6 @@ def update_sunburst(storkreds,question):
 
 server = app.server
 # for google analytics
-app.index_string = """
-<!DOCTYPE html>
-<html>
-    <head>
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-9CDEQDK05M"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-        
-          gtag('config', 'G-9CDEQDK05M');
-        </script>
-        {%metas%}
-        <title>{%title%}</title>
-        {%favicon%}
-        {%css%}
-    </head>
-    <body>
-        <div>My Custom header</div>
-        {%app_entry%}
-        <footer>
-            {%config%}
-            {%scripts%}
-            {%renderer%}
-        </footer>
-        <div>My Custom footer</div>
-    </body>
-</html>"""
+
 if __name__ == '__main__':
     app.run_server()
