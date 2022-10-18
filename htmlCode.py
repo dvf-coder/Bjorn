@@ -231,7 +231,7 @@ def CodeHTML(textBlack, veganGreen, labelsKommuneList):
         ],style={'background-color':'white','margin':'2%','display':'inline-block'})
     return component
 
-app = dash.Dash()
+app = dash.Dash(__name__)
 
 # google analytics
 app.index_string = """
